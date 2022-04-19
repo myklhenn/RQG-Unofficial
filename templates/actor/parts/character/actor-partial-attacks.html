@@ -91,7 +91,7 @@
                             {{#if @root.actor}}
                             <select class= "attack-select attacks" name="data.skillused" data-dtype="String">
                                 {{#select attack.data.data.skillused}}
-                                {{#each (getcharacterattackskills @root.actor.data.id attack.data.data.attacktype) as |skill id|}}
+                                {{#each (getcharacterattackskills @root.actor.data._id attack.data.data.attacktype) as |skill id|}}
                                 <option value="{{skill.id}}">{{skill.name}}</option>
                                 {{/each}}
                                 {{/select}}

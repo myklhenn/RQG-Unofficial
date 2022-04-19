@@ -31,7 +31,7 @@ export class RunequestActor extends Actor {
     // Re-map all attributes onto the base roll data
     if ( !!shorthand ) {
       for ( let [k, v] of Object.entries(data.attributes) ) {
-        if ( !(k in data) ) data[k] = v.value;
+        if ( !(k in data) && v !== null ) data[k] = v.value;
       }
       //delete data.attributes;
     }
