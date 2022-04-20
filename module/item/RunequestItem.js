@@ -362,26 +362,22 @@ export class RunequestItem extends Item {
     let isFailure= (result== "failure");
     let isFumble= (result== "fumble");
 
-    if( result== "success") {
+    if(result == "success" || result == "special" || result == "critical") {
       damageData.damage = await damageData.damage.roll();
       damageData.damagebonus = await damageData.damagebonus.roll();
       damageData.totaldamage = damageData.damage.total+ damageData.damagebonus.total;
     }
-    else if(result=="special") {  
+    if(result == "special" || result == "critical") {  
       damageData.specialdamage = await damageData.specialdamage.roll();
-      damageData.damagebonus = await damageData.damagebonus.roll();
-      damageData.totaldamage = damageData.specialdamage.total + damageData.damagebonus.total;
+      damageData.specialtotaldamage = damageData.specialdamage.total + damageData.damagebonus.total;
     }
-    else if(result=="critical") {
+    if(result == "critical") {
       damageData.criticaldamage = await damageData.criticaldamage.roll();
-      if(attack.data.data.specialtype != "C") {
-        damageData.damagebonus = await damageData.damagebonus.roll();        
-      }
-      else {
+      if (attack.data.data.specialtype == "C") {
         damageData.damagebonus = new Roll("0");
-        damageData.damagebonus = await damageData.damagebonus.roll();        
+        damageData.damagebonus = await damageData.damagebonus.roll();
       }
-      damageData.totaldamage = damageData.criticaldamage.total + damageData.damagebonus.total;
+      damageData.criticaltotaldamage = damageData.criticaldamage.total + damageData.damagebonus.total;
     }
 
     const compendiumname = "runequest.rolltables";
@@ -470,7 +466,7 @@ export class RunequestItem extends Item {
       case "S":        
       default:
         let specialroll= new Roll(damageData.damage.formula);
-        specialroll=specialroll.alter(2,0);
+        specialroll=specialroll.alter(2,0,2);
         damageData.specialdamage= new Roll(specialroll.formula);
         critdamage = damageData.specialdamage.clone().evaluate({maximize: true}).total;
         damageData.criticaldamage = new Roll(""+critdamage);
@@ -721,4 +717,3 @@ export class RunequestItem extends Item {
     return "fumble";
   }
 }
-  

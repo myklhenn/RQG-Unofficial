@@ -21,7 +21,7 @@
                 </tr>
             </tbody>
         </table>
-        <table>
+        <!--<table>
             <thead>
                 <th>{{localize "RQG.Defense"}}</th>
                 <th>{{localize "RQG.Roll"}}</th>
@@ -36,8 +36,8 @@
                     <td>{{defenseresult}}</td>
                 </tr>
             </tbody>
-        </table>
-        <span>Result: {{result}}</span>        
+        </table>-->
+        <!--<span>Result: {{result}}</span>-->
         {{log damageData}}
         {{#if isFumble}}
             <h3>Make a roll on the Fumble list</h3>
@@ -45,29 +45,41 @@
             {{#if isFailure}}
             <h3>Failed</h3>
             {{else}}
-                <h3>{{localize "RQG.Damage"}}</h3>
+            <!--<h3>{{localize "RQG.Damage"}}</h3>-->
                 <table>
                     <tbody>
                             <tr>
-                                <td>{{localize "RQG.Weapon"}}</td>
-                                <td>{{item.name}}</td></tr>
+                              <td>Success Level</td>
+                                {{#if isCritical}}
+                                  <td>C</td>
+                                  <td>S</td>
+                                  <td>N</td>
+                                {{/if}}
+                                {{#if isSpecial}}
+                                  <td>S</td>
+                                  <td>N</td>
+                                {{/if}}
+                                {{#if isSuccess}}
+                                <td>N</td>
+                                {{/if}}
+                            </tr>
                             <tr>
                                 <td>{{localize "RQG.Weapon_damage"}}</td>
-                                <td>
                                 {{#if isCritical}}
-                                    [[{{damageData.criticaldamage._total}}]]
-                                {{else}}
-                                    {{#if isSpecial}}
-                                        [[{{damageData.specialdamage._total}}]]
-                                    {{else}}
-                                        {{!-- This is a success --}}
-                                        [[{{damageData.damage._total}}]]
-                                    {{/if}}
-                                {{/if}}      
-                                </td>
+                                  <td>[[{{damageData.criticaltotaldamage}}]]</td>
+                                  <td>[[{{damageData.specialtotaldamage}}]]</td>
+                                  <td>[[{{damageData.totaldamage}}]]</td>
+                                {{/if}}
+                                {{#if isSpecial}}
+                                  <td>[[{{damageData.specialtotaldamage}}]]</td>
+                                  <td>[[{{damageData.totaldamage}}]]</td>
+                                {{/if}}
+                                {{#if isSuccess}}
+                                  <td>[[{{damageData.totaldamage}}]]</td>
+                                {{/if}}
                             </tr>
-                            <tr><td>{{localize "RQG.Damage_Bonus"}}</td><td>[[{{damageData.damagebonus._total}}]]</td></tr>
-                            <tr><td>{{localize "RQG.Total_damage"}}</td><td>[[{{damageData.totaldamage}}]]</td></tr>
+                            <!--<tr><td>{{localize "RQG.Damage_Bonus"}}</td><td>[[{{damageData.damagebonus._total}}]]</td></tr>
+                            <tr><td>{{localize "RQG.Total_damage"}}</td><td>[[{{damageData.totaldamage}}]]</td></tr>-->
                     </tbody>
                 </table>
                 <div class="card-content">
