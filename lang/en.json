@@ -64,7 +64,7 @@
     "RQG.RuneSpell": "Rune Spell",
     "RQG.SpiritSpell": "Spirit Spell",
 
-   
+
     "RQG.Category": "Category",
     "RQG.Experience": "Experience",
 
@@ -91,7 +91,7 @@
     "RQG.Points": "Points",
     "RQG.Rune": "Rune",
     "RQG.Cult": "Cult",
-    
+
     "RQG.Nearlyimpossible": "Nearly impossible",
     "RQG.Veryhard": "Very hard",
     "RQG.Hard": "Hard",
@@ -121,7 +121,7 @@
     "RQG.Catmodifier": "Category modifier",
     "RQG.DamageBonus": "Damage Bonus",
 
-    
+
     "RQG.1H_Mace":"1H Mace",
     "RQG.2H_Mace":"2H Mace",
     "RQG.Sling":"Sling",
@@ -217,5 +217,10 @@
     "RQG.Spiritspells": "Spirit Magic Spells",
     "RQG.Cults": "Cults",
     "RQG.Game": "Game",
-    "RQG.Spell": "Spell"
+    "RQG.Spell": "Spell",
+
+    "RQG.CharacterSheet": "Runequest",
+    "RQG.CharacterSheetStarterSet": "Runequest (Starter Set)",
+    "RQG.CharacterSheetHarharlHomebrew": "Runequest (Harharl's Homebrew)",
+    "RQG.CharacterSheetNPC": "Runequest NPC"
 }

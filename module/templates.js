@@ -32,7 +32,7 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/parts/npc/npc-partial-attacks.html",
     "systems/runequest/templates/actor/parts/npc/npc-magic.html",
     "systems/runequest/templates/actor/parts/actor-activeeffects.html",
-    "systems/runequest/templates/actor/parts/actor-activeeffectsv2.html",     
+    "systems/runequest/templates/actor/parts/actor-activeeffectsv2.html",
     // Item Sheet Partials
     "systems/runequest/templates/item/parts/origin-skills.html",
     "systems/runequest/templates/item/parts/origin-skilltable.html",
@@ -40,7 +40,7 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/starterset/parts/general.html",
     "systems/runequest/templates/actor/starterset/parts/game.html",
     "systems/runequest/templates/actor/starterset/parts/skills-ss-partial.html",
-    "systems/runequest/templates/actor/starterset/parts/hitlocations-ss-partial.html", 
+    "systems/runequest/templates/actor/starterset/parts/hitlocations-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/attributes-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/runespells-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/cults-ss-partial.html",
@@ -48,6 +48,8 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/starterset/parts/runes-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/passions-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/mpstorage-ss-partial.html",
-    "systems/runequest/templates/actor/starterset/parts/backstory.html"               
+    "systems/runequest/templates/actor/starterset/parts/backstory.html"
+    // Harharl's Homebrew CS Partials
+    // (add partials here once they are created)
   ]);
 };
