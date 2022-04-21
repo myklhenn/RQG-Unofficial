@@ -354,6 +354,14 @@ export class RunequestItem extends Item {
     if(!attack.data.data.db) {
       damagebonus="0";
     }
+    //ugly and terrible but it works
+    if (attack.data.data.attacktype == 'missile') {
+      if (damagebonus != "0") {
+        let arr = damagebonus.split("D");
+        damagebonus = arr[0] + "D" + (parseInt(arr[1]) / 2).toString();
+        console.log(damagebonus);
+      }
+    }
     let damageData = await this.getdamagedata(attack,damagebonus);
     let rollMode = game.settings.get("core", "rollMode");
     let isCritical = (result=="critical");
@@ -365,18 +373,14 @@ export class RunequestItem extends Item {
     if(result == "success" || result == "special" || result == "critical") {
       damageData.damage = await damageData.damage.roll();
       damageData.damagebonus = await damageData.damagebonus.roll();
-      damageData.totaldamage = damageData.damage.total+ damageData.damagebonus.total;
+      damageData.totaldamage = damageData.damage.total + damageData.damagebonus.total;
     }
     if(result == "special" || result == "critical") {  
       damageData.specialdamage = await damageData.specialdamage.roll();
-      damageData.specialtotaldamage = damageData.specialdamage.total + damageData.damagebonus.total;
+      damageData.specialtotaldamage = damageData.damage.total + damageData.specialdamage.total + damageData.damagebonus.total;
     }
     if(result == "critical") {
       damageData.criticaldamage = await damageData.criticaldamage.roll();
-      if (attack.data.data.specialtype == "C") {
-        damageData.damagebonus = new Roll("0");
-        damageData.damagebonus = await damageData.damagebonus.roll();
-      }
       damageData.criticaltotaldamage = damageData.criticaldamage.total + damageData.damagebonus.total;
     }
 
@@ -454,22 +458,23 @@ export class RunequestItem extends Item {
     //(damageData);
     switch (attack.data.data.specialtype) {
       case "C":
-        specialdamage = damageData.damage.formula+"+"+damageData.damagebonus.clone().evaluate({maximize: true}).total;
+        specialdamage = damageData.damagebonus.clone().evaluate({maximize: true}).total;
         //(specialdamage);
-        damageData.specialdamage= new Roll(specialdamage);
+        damageData.specialdamage= new Roll(""+specialdamage);
         //(damageData.specialdamage);
-        critdamage = damageData.specialdamage.clone().evaluate({maximize: true}).total+"+"+damageData.damagebonus.clone().evaluate({maximize: true}).total;
+        critdamage = damageData.damage.clone().evaluate({maximize: true}).total+"+"+damageData.specialdamage.clone().evaluate({maximize: true}).total;
         //(critdamage);
         damageData.criticaldamage = new Roll(""+critdamage);
         break;
       case "I":
       case "S":        
       default:
-        let specialroll= new Roll(damageData.damage.formula);
-        specialroll=specialroll.alter(2,0,2);
-        damageData.specialdamage= new Roll(specialroll.formula);
-        critdamage = damageData.specialdamage.clone().evaluate({maximize: true}).total;
+        let specialroll = new Roll(damageData.damage.formula);
+        //specialroll = specialroll.alter(2,0,true);
+        damageData.specialdamage = new Roll(specialroll.formula);
+        critdamage = damageData.damage.clone().evaluate({maximize: true}).total + "+" + damageData.specialdamage.clone().evaluate({maximize: true}).total;
         damageData.criticaldamage = new Roll(""+critdamage);
+        console.log(damageData);
         break;
     }
     return damageData;
