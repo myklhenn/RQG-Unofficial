@@ -1,0 +1,48 @@
+<table class="skills-section-table hh-table" data-skillcategory="{{skillCat}}">
+    <thead>
+        <tr>
+            <th>{{skillCat}}</th>
+            <th>
+                <a class="toggle-sum-skill-cat-modifier" title="Toggle inclusion of skill category modifier in skill total column">
+                    {{#if data.flags.sumskillcatmodifier}}
+                    <i class="fas fa-calculator" style="color: var(--color-text-light-highlight)"></i>
+                    {{else}}
+                    <i class="fas fa-calculator" style="color: var(--color-text-light-primary)"></i>
+                    {{/if}}
+                </a>
+            </th>
+            <th>
+                <input class="attribute-display" type="text" value="{{skillcategorymodifier @root.data.skillcategory skillCat}}" disabled>
+            </th>
+            <th>
+                <a class="item-control item-create" title="Create item" data-type="skill" data-skillcategory="{{skillCat}}">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each skillList as |skill id|}}
+        <tr class="item" data-item-id="{{skill.id}}">
+            <td>
+                <span class="skill-roll" data-skillname="{{skill.name}}" data-skillcategory="{{skill.data.data.skillcategory}}">
+                    {{skill.name}}
+                </span>
+            </td>
+            <td class="skill-base-column">
+                <input class="attribute-display" type="text" title="Base skill value" value="{{skill.data.data.base}}" disabled>
+            </td>
+            <td class="skill-total-column">
+                {{#if ../data.flags.sumskillcatmodifier}}
+                <input class="attribute-display sum-skill-cat-modifier" type="text" title="Total skill value + category modifier" value="{{addCatModifierToSkill @root.data.skillcategory ../skillCat skill.data.data.total}}" disabled>
+                {{else}}
+                <input class="attribute-display" type="text" title="Total skill value" value="{{skill.data.data.total}}" disabled>
+                {{/if}}
+            </td>
+            <td class="skill-experience-column">
+                <input class="skill-experience" type="checkbox" title="Skill experience marker" name="data.experience" {{checked skill.data.data.experience}}>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

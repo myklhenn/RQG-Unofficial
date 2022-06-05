@@ -1,0 +1,27 @@
+<table class="attacks-table hh-table">
+    <thead>
+        <th>Attacks</th>
+        <th>%</th>
+        <th>Damage</th>
+        <th>SR</th>
+        <th>Pts</th>
+        <th>
+            <a class="item-control item-create" title="Add an attack" data-type="attack">
+                <i class="fas fa-plus"></i>
+            </a>
+        </th>
+    </thead>
+    <tbody>
+        {{> "systems/runequest/templates/actor/hh/parts/actor-attacks-section.html"
+            attackSkillCategory="meleeweapons" attackList=data.attacks.melee }}
+
+        {{> "systems/runequest/templates/actor/hh/parts/actor-attacks-section.html"
+            attackSkillCategory="missileweapons" attackList=data.attacks.missile }}
+
+        {{> "systems/runequest/templates/actor/hh/parts/actor-attacks-section.html"
+            attackSkillCategory="naturalweapons" attackList=data.attacks.natural }}
+
+        {{> "systems/runequest/templates/actor/hh/parts/actor-attacks-section.html"
+            attackSkillCategory="spiritweapons" attackList=data.attacks.spirit }}
+    </tbody>
+</table>

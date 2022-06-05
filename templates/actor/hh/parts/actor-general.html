@@ -1,0 +1,78 @@
+<div class="flexrow">
+    <div class="flexcol general-info-img">
+        <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+    </div>
+    <div class="flexcol general-info-col">
+        <div class="flexrow general-info-row">
+            <div class="general-info-item">
+                <label>{{localize "RQG.Name"}}&nbsp;</label>
+                <input type="text" name="name" value="{{actor.name}}">
+            </div>
+            <div class="general-info-item" style="flex: 0 0 120px;">
+                <label>{{localize 'RQG.BirthYear'}}&nbsp;</label>
+                <input type="text" name="data.general.birthyear.value" value="{{data.general.birthyear.value}}">
+            </div>
+            <div class="general-info-item" style="flex: 0 0 75px;">
+                <label>{{localize 'RQG.Age'}}&nbsp;</label>
+                <input type="text" name="data.general.age.value" value="{{data.general.age.value}}">
+            </div>
+        </div>
+        <div class="flexrow general-info-row">
+            <div class="general-info-item">
+                <label>{{localize 'RQG.Gender'}}&nbsp;</label>
+                <input type="text" name="data.general.gender.value" value="{{data.general.gender.value}}">
+            </div>
+            <div class="general-info-item">
+                <label>{{localize 'RQG.Homeland'}}&nbsp;</label>
+                <input type="text" name="data.general.homeland.value" value="{{data.general.homeland.value}}">
+            </div>
+        </div>
+        <div class="flexrow general-info-row">
+            <div class="general-info-item">
+                <label>{{localize 'RQG.Tribe'}}&nbsp;</label>
+                <input type="text" name="data.general.tribe.value" value="{{data.general.tribe.value}}">
+            </div>
+            <div class="general-info-item">
+                <label>{{localize 'RQG.Clan'}}&nbsp;</label>
+                <input type="text" name="data.general.clan.value" value="{{data.general.clan.value}}">
+            </div>
+        </div>
+    </div>
+    <div class="flexcol general-info-col">
+        <div class="flexrow general-info-row">
+            <div class="general-info-item">
+                <label>{{localize 'RQG.Occupation'}}&nbsp;</label>
+                <input type="text" name="data.general.occupation.value" value="{{data.general.occupation.value}}">
+            </div>
+            <div class="general-info-item" style="flex: 0 0 150px;">
+                <label>{{localize 'RQG.Ransom'}}&nbsp;</label>
+                <input type="text" name="data.general.ransom.value" value="{{data.general.ransom.value}}">&nbsp;(L)
+            </div>
+        </div>
+        <div class="flexrow general-info-row">
+            <div class="general-info-item" style="flex: 0 0 120px;">
+                <label>{{localize 'RQG.Reputation'}}&nbsp;</label>
+                <input type="text" name="data.general.reputation.value" value="{{data.general.reputation.value}}">
+            </div>
+            <div class="general-info-item">
+                <label>SoL&nbsp;</label>
+                <input type="text" name="data.general.standardofliving.value"
+                    value="{{data.general.standardofliving.value}}">
+            </div>
+            <div class="general-info-item" style="flex: 0 0 150px;">
+                <label>{{localize 'RQG.BaseIncome'}}&nbsp;</label>
+                <input type="text" name="data.general.baseincome.value" value="{{data.general.baseincome.value}}">&nbsp;(L)
+            </div>
+        </div>
+        <div class="flexrow general-info-row">
+            <div class="general-info-item">
+                <label>{{localize 'RQG.Campaign'}}&nbsp;</label>
+                <input type="text" name="data.general.campaign.value" value="{{data.general.campaign.value}}">
+            </div>
+            <div class="general-info-item">
+                <label>Player&nbsp;</label>
+                <input type="text">
+            </div>
+        </div>
+    </div>
+</div>

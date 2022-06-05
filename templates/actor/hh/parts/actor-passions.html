@@ -1,0 +1,51 @@
+<table class="passions-table hh-table">
+    <thead>
+        <tr>
+            <th colspan="2">Passions</th>
+            <th>
+                <a class="item-control item-create" title="Add a new passion" data-type="passion">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#if data.passions}}
+        {{#each data.passions as |passion| }}
+        <tr class="item" data-item-id="{{passion.id}}">
+            <td>
+                <span class="passion-roll">{{passion.name}}</span>
+                <input
+                    class="attribute-display"
+                    type="text"
+                    value="{{passion.data.data.total}}"
+                    disabled
+                />
+            </td>
+            <td>
+                <input
+                    class="passion-experience"
+                    type="checkbox"
+                    name="data.experience"
+                    {{checked passion.data.data.experience}}
+                />
+            </td>
+            <td class="item-controls">
+                <a class="item-control item-edit" title="Edit Item">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a class="item-control item-delete" title="Delete Item">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="3" class="empty-table-message">
+                <a>Add a passion...</a>
+            </td>
+        </tr>
+        {{/if}}
+    </tbody>
+</table>

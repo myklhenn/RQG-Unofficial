@@ -1,0 +1,31 @@
+{{#each attackList as |attack| }}
+<tr class="item" data-item-id="{{attack.id}}" data-attackname="{{attack.name}}" data-skillcategory="{{../attackSkillCategory}}">
+    <td>
+        <a class="attack-roll">{{attack.name}}</a>
+    </td>
+    <td>
+        {{#if ../data.flags.sumskillcatmodifier}}
+        <input class="attribute-display" type="text" value="{{addCatModifierToSkill @root.data.skillcategory ../attackSkillCategory attack.data.data.attacktotal}}" disabled>
+        {{else}}
+        <input class="attribute-display" type="text" value="{{attack.data.data.attacktotal}}" disabled>
+        {{/if}}
+    </td>
+    <td>
+        <input class="attribute-display" type="text" value="{{attack.data.data.damage}}" disabled>
+    </td>
+    <td>
+        <input class="attribute-display" type="text" value="{{attack.data.data.sr}}" disabled>
+    </td>
+    <td>
+        <input class="attribute-display" type="text" value="{{attack.data.data.hpcurrent}} / {{attack.data.data.hpmax}}" disabled>
+    </td>
+    <td class="item-controls">
+        <a class="item-control item-edit" title="Edit Item">
+            <i class="fas fa-edit"></i>
+        </a>
+        <a class="item-control item-delete" title="Delete Item">
+            <i class="fas fa-trash"></i>
+        </a>
+    </td>
+</tr>
+{{/each}}

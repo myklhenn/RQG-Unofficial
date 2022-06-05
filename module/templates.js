@@ -32,7 +32,7 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/parts/npc/npc-partial-attacks.html",
     "systems/runequest/templates/actor/parts/npc/npc-magic.html",
     "systems/runequest/templates/actor/parts/actor-activeeffects.html",
-    "systems/runequest/templates/actor/parts/actor-activeeffectsv2.html",     
+    "systems/runequest/templates/actor/parts/actor-activeeffectsv2.html",
     // Item Sheet Partials
     "systems/runequest/templates/item/parts/origin-skills.html",
     "systems/runequest/templates/item/parts/origin-skilltable.html",
@@ -40,7 +40,7 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/starterset/parts/general.html",
     "systems/runequest/templates/actor/starterset/parts/game.html",
     "systems/runequest/templates/actor/starterset/parts/skills-ss-partial.html",
-    "systems/runequest/templates/actor/starterset/parts/hitlocations-ss-partial.html", 
+    "systems/runequest/templates/actor/starterset/parts/hitlocations-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/attributes-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/runespells-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/cults-ss-partial.html",
@@ -48,6 +48,23 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/starterset/parts/runes-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/passions-ss-partial.html",
     "systems/runequest/templates/actor/starterset/parts/mpstorage-ss-partial.html",
-    "systems/runequest/templates/actor/starterset/parts/backstory.html"               
+    "systems/runequest/templates/actor/starterset/parts/backstory.html",
+    // Harharl's Homebrew CS Partials
+    "systems/runequest/templates/actor/hh/parts/actor-general.html",
+    "systems/runequest/templates/actor/hh/parts/actor-characteristics.html",
+    "systems/runequest/templates/actor/hh/parts/actor-element-runes.html",
+    "systems/runequest/templates/actor/hh/parts/actor-power-runes.html",
+    "systems/runequest/templates/actor/hh/parts/actor-attributes.html",
+    "systems/runequest/templates/actor/hh/parts/actor-hitlocations.html",
+    "systems/runequest/templates/actor/hh/parts/actor-passions.html",
+    "systems/runequest/templates/actor/hh/parts/actor-attacks.html",
+    "systems/runequest/templates/actor/hh/parts/actor-attacks-section.html",
+    "systems/runequest/templates/actor/hh/parts/actor-skills.html",
+    "systems/runequest/templates/actor/hh/parts/actor-skills-section.html",
+    "systems/runequest/templates/actor/hh/parts/actor-cults.html",
+    "systems/runequest/templates/actor/hh/parts/actor-rune-spells.html",
+    "systems/runequest/templates/actor/hh/parts/actor-spirit-spells.html",
+    "systems/runequest/templates/actor/hh/parts/actor-mp-storage.html",
+    "systems/runequest/templates/actor/hh/parts/actor-gear.html"
   ]);
 };

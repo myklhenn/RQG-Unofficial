@@ -3,7 +3,7 @@ var less = require('gulp-less');
 
 gulp.task('less', function(cb) {
   gulp
-    .src('less/rqgss.less')
+    .src(['less/rqgss.less', 'less/rqghh.less'])
     .pipe(less())
     .pipe(gulp.dest("./styles/"));
   cb();

@@ -10,6 +10,7 @@ import { RunequestItem } from "./item/RunequestItem.js";
 import { RunequestItemSheet } from "./item/RunequestItem-Sheet.js";
 import { RunequestActorSheet } from "./actor/runequestactor-sheet.js";
 import { RunequestActorStarterSetSheet } from "./actor/runequestactor-sheet-starterset.js";
+import { RunequestActorHarharlHomebrewSheet } from './actor/runequestactor-sheet-hh.js';
 import { RunequestActorNPCSheet } from "./actor/runequestactornpc-sheet.js";
 import { preloadHandlebarsTemplates } from "./templates.js";
 import { RQG } from "./config.js";
@@ -41,7 +42,7 @@ Hooks.once("init", async function() {
     },
   };
   */
- 
+
 	/**
 	 * Set an initiative formula for the system
 	 * @type {String}
@@ -66,17 +67,22 @@ Hooks.once("init", async function() {
     types: ["character"],
     makeDefault: true,
     label: "RQG.CharacterSheet"
-  }); 
+  });
   Actors.registerSheet("runequest", RunequestActorStarterSetSheet, {
     types: ["character"],
     makeDefault: false,
     label: "RQG.CharacterSheetStarterSet"
-  });   
+  });
+  Actors.registerSheet("runequest", RunequestActorHarharlHomebrewSheet, {
+    types: ["character"],
+    makeDefault: false,
+    label: "RQG.CharacterSheetHarharlHomebrew"
+  });
   Actors.registerSheet("runequest", RunequestActorNPCSheet, {
     types: ["npc"],
     makeDefault: true,
     label: "RQG.CharacterSheetNPC"
-  });  
+  });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("runequest", RunequestItemSheet, {makeDefault: true});
 
@@ -105,14 +111,14 @@ Hooks.once("init", async function() {
     type: String,
     default: "MedievalSharp",
     config: true
-  });    
+  });
   game.Runequest = {
     macros: {
       itemRoll: RQGTools.itemRollMacro
     }
   }
 
-  
+
   preloadHandlebarsTemplates();
 });
 Hooks.on('hotbarDrop', async (bar, data, slot) =>
@@ -142,30 +148,30 @@ Handlebars.registerHelper("getcharacterattackskills", function(actorid, attackty
       //Add the Shield skills to melee attack possible skills
       attacks=attacks.concat(actor.data.data.skills["shields"]);
       console.log(attacks);
-    }  
+    }
   }
   return attacks;
 });
 // Added Helpers to Handlebars
 Handlebars.registerHelper("getruneletter", function(runeid) {
   const runes= {
-    "air": "A",
-    "fire": "f",
-    "darkness": "D",
-    "water": "Z",
+    "air": "g",
+    "fire": ".",
+    "darkness": "o",
+    "water": "w",
     "earth": "e",
-    "moon": "6",
-    "man": "M",
+    "moon": "/",
+    "man": ",",
     "beast": "B",
-    "fertility": "X",
-    "death": "T",
-    "harmony": "H",
-    "disorder": "J",
-    "truth": "Y",
-    "illusion": "I",
-    "stasis": "U",
-    "movement": "V",
-    "chaos": "C"
+    "fertility": "x",
+    "death": "t",
+    "harmony": "l",
+    "disorder": "j",
+    "truth": "y",
+    "illusion": "i",
+    "stasis": "c",
+    "movement": "s",
+    "chaos": "?"
   }
   return runes[runeid];
 });
@@ -196,4 +202,11 @@ Handlebars.registerHelper({
 });
 Handlebars.registerHelper("getGameSetting", function(setting) {
   return game.settings.get("Runequest",setting);
+});
+Handlebars.registerHelper("addCatModifierToSkill", function(skillCatList, skillCat, skillTotal) {
+  let catModifier = 0;
+  if (skillCat != "others" && skillCat != "spiritweapons") {
+    catModifier = skillCatList[skillCat].modifier;
+  }
+  return skillTotal + catModifier;
 });

@@ -1,0 +1,31 @@
+<div class="elemental-rune-section">
+	<header class="title">Elemental Runes</header>
+	<div class="flexrow elemental-rune-row">
+		{{#each data.elementalrunes as |rune id| }}
+		<div class="flexrow rune-item" data-rune="{{id}}">
+			<img
+				class="rune-img elemental-rune-roll"
+				src="/systems/runequest/styles/img/{{id}}.png"
+				title="{{localize rune.label}}"
+				alt="{{localize rune.label}}"
+			/>
+			<div class="rune-content">
+				<label>{{localize rune.label}}</label>
+				<div class="rune-inputs">
+					<input
+						type="text"
+						name="data.elementalrunes.{{id}}.value"
+						value="{{rune.value}}"
+						data-dtype="Number"
+					/>
+					<input
+						type="checkbox"
+						name="data.elementalrunes.{{id}}.experience"
+						{{checked rune.experience}}
+					/>
+				</div>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+</div>

@@ -1,0 +1,121 @@
+<table class="attributes-table hh-table">
+    {{#with data.attributes as |attr| }}
+	<tbody>
+		<tr>
+			<td>
+				{{localize 'RQG.HP'}}
+				<progress
+					class="attribute-progress"
+					value="{{attr.hitpoints.value}}"
+					max="{{attr.hitpoints.max}}"
+				></progress>
+			</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{attr.hitpoints.value}} / {{attr.hitpoints.max}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>{{localize "RQG.GENERALWOUNDS"}}</td>
+			<td>
+				<input
+					class="attribute-input"
+					type="text"
+					name="data.attributes.generalwounds"
+					value="{{attr.generalwounds}}"
+					data-dtype="Number"
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{{localize 'RQG.MP'}}
+				<progress
+					class="attribute-progress"
+					id="hitpoints"
+					value="{{attr.magicpoints.value}}"
+					max="{{attr.magicpoints.max}}"
+				></progress>
+			</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{attr.magicpoints.value}} / {{attr.magicpoints.max}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>SIZ SR</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{attr.sizsr}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>DEX SR</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{data.attributes.dexsr}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>Melee SR</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{data.attributes.meleesr}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>Damage Bonus</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{data.attributes.damagebonus}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>Move</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{data.attributes.move}}"
+					disabled
+				/>
+			</td>
+		</tr>
+		<tr>
+			<td>Healing Rate</td>
+			<td>
+				<input
+					class="attribute-display"
+					type="text"
+					value="{{data.attributes.healingrate}}"
+					disabled
+				/>
+			</td>
+		</tr>
+	</tbody>
+    {{/with}}
+</table>
