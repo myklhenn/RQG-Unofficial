@@ -1,0 +1,329 @@
+@font-face {
+  font-family: GloranthaCoresRunes;
+  src: url("./fonts/GloranthaCoreRunes1.5.ttf");
+}
+.rqghh .flexrow {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+.rqghh .flexcol {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+}
+.rqghh .flexrow > *,
+.rqghh .flexcol > * {
+  flex: 1;
+}
+.rqghh .flexrow > .flex0,
+.rqghh .flexcol > .flex0 {
+  display: block;
+  flex: 0;
+}
+.rqghh .flexrow > .flex1,
+.rqghh .flexcol > .flex1 {
+  flex: 1;
+}
+.rqghh .flexrow > .flex2,
+.rqghh .flexcol > .flex2 {
+  flex: 2;
+}
+.rqghh .flexrow > .flex3,
+.rqghh .flexcol > .flex3 {
+  flex: 3;
+}
+.rqghh nav.sheet-tabs {
+  margin-bottom: 0.75em;
+}
+.rqghh nav a.unlock-character-sheet {
+  flex: 0 0 20px;
+}
+.rqghh .general-info-img {
+  flex: 0 0 80px;
+}
+.rqghh .general-info-img img {
+  width: 80px;
+  height: 80px;
+  border: none;
+}
+.rqghh .general-info-col {
+  padding-top: 0.5em;
+}
+.rqghh .general-info-col:nth-child(n+2) {
+  padding-left: 0.5em;
+}
+.rqghh .general-info-row .general-info-item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 0.5em;
+}
+.rqghh .general-info-row .general-info-item label {
+  display: block;
+  flex: 0 0 content;
+}
+.rqghh .general-info-row .general-info-item input {
+  width: 100%;
+}
+.rqghh .general-info-row .general-info-item input:hover {
+  cursor: text;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh .general-info-row .general-info-item:nth-child(n+2) {
+  padding-left: 0.5em;
+}
+.rqghh .characteristic-row {
+  padding-top: 0.75em;
+  justify-content: space-evenly;
+}
+.rqghh .characteristic-row .characteristic-item {
+  align-items: center;
+  flex: 0 0 content;
+  font-size: 18px;
+  padding-bottom: 0.5em;
+}
+.rqghh .characteristic-row .characteristic-item .characteristic-rune {
+  font-family: GloranthaCoresRunes;
+  color: rgba(0, 0, 0, 0.5);
+}
+.rqghh .characteristic-row .characteristic-item label {
+  padding-right: 0.2em;
+}
+.rqghh .characteristic-row .characteristic-item label:hover {
+  cursor: pointer;
+  text-shadow: 0 0 8px var(--color-shadow-primary);
+}
+.rqghh .characteristic-row .characteristic-item label:hover nav {
+  text-shadow: none;
+}
+.rqghh .characteristic-row .characteristic-item input[type=text] {
+  text-align: center;
+  height: 30px;
+  width: 60px;
+}
+.rqghh .characteristic-row .characteristic-item input[type=text]:hover {
+  cursor: text;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh .characteristic-row .characteristic-item input[type=checkbox] {
+  margin: 0;
+  vertical-align: middle;
+}
+.rqghh .characteristic-row .characteristic-item input[type=checkbox]:hover {
+  cursor: pointer;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh .elemental-rune-section {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.rqghh .power-rune-section {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+.rqghh .elemental-rune-row {
+  justify-content: space-evenly;
+}
+.rqghh .power-rune-row {
+  justify-content: space-evenly;
+}
+.rqghh .power-rune-pair {
+  flex: 0 0 130px;
+  justify-content: space-evenly;
+  padding-bottom: 0.25em;
+}
+.rqghh .rune-item {
+  align-items: center;
+  flex: 0 0 content;
+  padding-bottom: 0.25em;
+}
+.rqghh .rune-item .rune-icon {
+  font-family: GloranthaCoresRunes;
+  font-size: 40px;
+  flex: 0 0 content;
+}
+.rqghh .rune-item .rune-img {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  margin-right: 0.4em;
+  border: none;
+}
+.rqghh .rune-item .rune-img:hover {
+  cursor: pointer;
+  filter: drop-shadow(0 0 8px var(--color-shadow-primary));
+}
+.rqghh .rune-item .rune-content {
+  max-width: 80px;
+}
+.rqghh .rune-item .rune-content .rune-inputs {
+  display: flex;
+  align-items: center;
+}
+.rqghh .rune-item input[type=text] {
+  text-align: center;
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+}
+.rqghh .rune-item input[type=text]:hover {
+  cursor: text;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh .rune-item input[type=checkbox] {
+  margin: 0 0 0 0.25em;
+  flex: 0 0 20px;
+}
+.rqghh .rune-item input[type=checkbox]:hover {
+  cursor: pointer;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh table.hh-table {
+  border: none;
+  margin-bottom: 1em;
+}
+.rqghh table.hh-table tr th:first-child,
+.rqghh table.hh-table tr td:first-child {
+  text-align: left;
+  padding-left: 1em;
+}
+.rqghh table.hh-table tr th,
+.rqghh table.hh-table tr td {
+  text-align: center;
+}
+.rqghh table.hh-table input[type=text] {
+  width: 50px;
+  height: 22px;
+}
+.rqghh table.hh-table input[type=text]:enabled:hover {
+  cursor: text;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh table.hh-table input[type=text].attribute-display {
+  border: none;
+}
+.rqghh table.hh-table input[type=checkbox]:hover {
+  cursor: pointer;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh table.hh-table th input.attribute-display {
+  color: var(--color-text-light-highlight);
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.rqghh .attributes-table {
+  flex: 0 0 230px;
+}
+.rqghh .attributes-table tr td:first-child {
+  width: 150px;
+}
+.rqghh .attributes-table progress {
+  width: 90px;
+  margin-left: 0.5em;
+  border-radius: 0.25em;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.rqghh .attributes-table progress::-webkit-progress-bar {
+  border-radius: 0.25em;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.rqghh .attributes-table progress::-webkit-progress-value {
+  border-radius: 0.25em;
+  background-color: var(--color-shadow-primary);
+}
+.rqghh .attributes-table progress::-moz-progress-bar {
+  border-radius: 0.25em;
+  background-color: var(--color-shadow-primary);
+}
+.rqghh .hitlocations-table {
+  flex: 1 0 content;
+}
+.rqghh .hitlocations-table tr th,
+.rqghh .hitlocations-table tr td {
+  width: 120px;
+}
+.rqghh .hitlocations-table tr td input[type=text] {
+  width: 60px;
+}
+.rqghh .passions-table tr .passion-roll:hover {
+  cursor: pointer;
+  text-shadow: 0 0 8px var(--color-shadow-primary);
+}
+.rqghh .passions-table tr .passion-roll:hover nav {
+  text-shadow: none;
+}
+.rqghh .passions-table tr td:first-child input[type=text] {
+  text-align: center;
+  margin-left: 0.75em;
+}
+.rqghh .passions-table tr td:nth-child(n+2) {
+  width: 120px;
+}
+.rqghh .table-divider table:first-child {
+  margin-right: 0.75em;
+}
+.rqghh .attacks-table tr td:nth-child(n+2) {
+  width: 120px;
+}
+.rqghh .skills-section-table {
+  flex: 0 0 content;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+.rqghh .skills-section-table tr th {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.rqghh .skills-section-table tr td {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.rqghh .skills-section-table tr td.skill-base-column {
+  width: 50px;
+}
+.rqghh .skills-section-table tr td.skill-base-column input {
+  font-style: italic;
+  color: rgba(25, 24, 19, 0.75);
+}
+.rqghh .skills-section-table tr td.skill-total-column {
+  width: 50px;
+}
+.rqghh .skills-section-table tr td.skill-experience-column {
+  width: 40px;
+}
+.rqghh .skills-section-table tr input.attribute-display {
+  width: 40px;
+  height: 20px;
+}
+.rqghh .skills-section-table tr td input[type=checkbox] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+.rqghh .skills-section-table tr .skill-roll:hover {
+  cursor: pointer;
+  text-shadow: 0 0 8px var(--color-shadow-primary);
+}
+.rqghh .skills-section-table tr .skill-roll:hover nav {
+  text-shadow: none;
+}
+.rqghh .skills-column:nth-child(n+2) {
+  padding-left: 0.5em;
+}
+.rqghh .cults-table tr td:nth-child(n+2) {
+  width: 120px;
+}
+.rqghh .cults-table input[type=text] {
+  width: 50px;
+}
+.rqghh .empty-table-message {
+  font-style: italic;
+  color: rgba(25, 24, 19, 0.75);
+}
+.rqghh .rune-spells-table tr td:nth-child(n+2) {
+  width: 120px;
+}
+.rqghh .rune-spells-table tr input.attribute-display {
+  width: 50px;
+}

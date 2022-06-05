@@ -5,8 +5,6 @@ import { attackMenuOptions } from "../menu/attack-context.js";
 import ActiveEffectRunequest from "../active-effect.js";
 import { RunequestBaseActorSheet } from "./rqg-baseactor-sheet.js";
 
-// (currently a direct copy of the starter set sheet to confirm the new sheet files were linked correctly)
-
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -15,7 +13,7 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["rqgss", "sheet", "actor"],
+      classes: ["sheet", "actor", "rqghh"],
       template:
         "systems/runequest/templates/actor/hh/hh-actor-sheet.html",
       width: 1200,
@@ -34,304 +32,135 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
   static confirmItemDelete(actor, itemId) {
     actor.deleteEmbeddedDocuments("Item", [itemId]);
   }
-  /* -------------------------------------------- */
 
+  /**
+   * @returns the data structure from the base sheet
+   */
   getData() {
-    // Retrieve the data structure from the base sheet. You can inspect or log
-    // the context variable to see the structure, but some key properties for
-    // sheets are the actor object, the data object, whether or not it's
-    // editable, the items array, and the effects array.
-    //("getData() starting");
     const context = super.getData();
-
-    /****
-     *
-     * This is where we can later add CS specific stuff before retruning the context
-     *
-     ****/
+    // console.log(context);
     return context;
   }
 
   /**
    * Organize and classify Items for Character sheets.
    *
-   * @param {Object} actorData The actor to prepare.
+   * @param {Object} context The actor to prepare.
    *
    * @return {undefined}
    */
+
   _prepareCharacterData(context) {}
 
   /**
    * Organize and classify Items for Character sheets.
    *
-   * @param {Object} actorData The actor to prepare.
+   * @param {Object} context The actor to prepare.
    *
    * @return {undefined}
    */
   _prepareItems(context) {}
 
-  /* -------------------------------------------- */
-
-  /** @override */
+  /**
+   *
+   *
+   * @override
+   *
+   * @param {Object} html DOM object to select parts of and add listeners to
+   */
   activateListeners(html) {
     super.activateListeners(html);
 
-    // Everything below here is only needed if the sheet is editable
+    // everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
 
-    new ContextMenu(
-      html,
-      ".skill-roll",
-      skillMenuOptions(this.actor, this.token)
-    );
-    new ContextMenu(
-      html,
-      ".summary-skill-roll",
-      skillMenuOptions(this.actor, this.token)
-    );
+    // (un)lock character sheet
+    html.find(".unlock-character-sheet").click(() => this._onFlagToggle("locked"));
+
+    // roll characteristics
+    html.find(".characteristic-roll").click(e => this._onCharacteristicRoll(e));
+
+    // roll elemental runes
+    html.find(".elemental-rune-roll").click(e => this._onElementalRuneRoll(e));
+
+    // roll power runes
+    html.find(".power-rune-roll").click(e => this._onPowerRuneRoll(e));
+
+    // roll passions
+    html.find(".passion-roll").click(e => this._onPassionRoll(e));
+    // context menu for passions
     new ContextMenu(
       html,
       ".passion-roll",
       skillMenuOptions(this.actor, this.token)
     );
-    new ContextMenu(
-      html,
-      ".attack-roll-ss",
-      attackMenuOptions(this.actor, this.token)
-    );
-    // Add Inventory Item
+
+    // add inventory item
     html.find(".item-create").click(this._onItemCreate.bind(this));
 
-    // Update Inventory Item
-    html.find(".item-edit").click((ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getEmbeddedDocument("Item", li.data("itemId"));
+    // update inventory item
+    html.find(".item-edit").click(e => {
+      const itemId = e.currentTarget.closest(".item").dataset["itemId"];
+      const item = this.actor.getEmbeddedDocument("Item", itemId);
       item.sheet.render(true);
     });
 
-    // Delete Inventory Item
-    html.find(".item-delete").click((ev) => {
-      const li = $(ev.currentTarget).parents(".item");
+    // delete inventory item
+    html.find(".item-delete").click(e => {
+      const li = e.currentTarget.closest(".item");
       this.actor.deleteEmbeddedDocuments("Item", [li.data("itemId")]);
       li.slideUp(200, () => this.render(false));
     });
 
-    // Roll Characteristics
-    html.find(".characteristic-roll").mousedown((event) => {
-      event.preventDefault();
-      const data = this.getData();
-      if (event.button == 0) {
-      } else {
-        return;
-      }
-      const row = event.target.parentElement.parentElement;
-      const characid = row.dataset["characteristic"];
-      let charname = game.i18n.localize(
-        data.data.characteristics[characid].label
-      );
-      let charvalue = data.data.characteristics[characid].value;
-      let difficultymultiplier = 5;
-      let dialogOptions = {
-        title: "Passion Roll",
-        template: "/systems/runequest/templates/chat/char-dialog.html",
-        "z-index": 100,
-        // Prefilled dialog data
+    // toggle inclusion of skill category modifier in skill total column
+    html.find(".toggle-sum-skill-cat-modifier").click(
+      () => this._onFlagToggle("sumskillcatmodifier")
+    );
 
-        data: {
-          charname: charname,
-          charvalue: charvalue,
-          difficultymultiplier: difficultymultiplier,
-        },
-        callback: (html) => {
-          // When dialog confirmed, fill testData dialog information
-          // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
-          charname = html.find('[name="charname"]').val();
-          let testmodifier = Number(html.find('[name="testmodifier"]').val());
-          difficultymultiplier = Number(
-            html.find('[name="difficultymultiplier"]').val()
-          );
-          charvalue = Number(html.find('[name="charvalue"]').val());
-          const target = charvalue * difficultymultiplier + testmodifier;
-          this.basicRoll(charname, target);
-        },
-      };
-      renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
-        new Dialog({
-          title: dialogOptions.title,
-          content: dlg,
-          buttons: {
-            rollButton: {
-              label: game.i18n.localize("Roll"),
-              callback: (html) => dialogOptions.callback(html),
-            },
-          },
-          default: "rollButton",
-        }).render(true);
-      });
-    });
-    // Roll for Spirit Spells
-    html
-      .find(".spiritspell-roll")
-      .click((event) => this._onSpiritSpellRoll(event));
-    // Roll for Passions
-    html.find(".passion-roll-old").mousedown((event) => {
-      event.preventDefault();
-      const data = this.getData();
-      if (event.button == 0) {
-      } else {
-        return;
-      }
-      const row = event.target.parentElement.parentElement;
-      //(row);
-      let passionname = row.dataset["passionname"];
-      const passionid = row.dataset["itemId"];
-      //("passionname:"+passionname+" - passionid:"+passionid);
-      const passion = this.actor.getEmbeddedDocument("Item", passionid);
-      //(passion);
-      let dialogOptions = {
-        title: "Passion Roll",
-        template: "/systems/runequest/templates/chat/skill-dialog.html",
-        "z-index": 100,
-        // Prefilled dialog data
+    // roll skills
+    html.find(".skill-roll").click(e => this._onSkillRoll(e));
+    // context menu for skills
+    new ContextMenu(
+      html,
+      ".skill-roll",
+      skillMenuOptions(this.actor, this.token)
+    );
 
-        data: {
-          skillname: passionname,
-          skillvalue: passion.data.data.total,
-          catmodifier: 0,
-        },
-        callback: (html) => {
-          // When dialog confirmed, fill testData dialog information
-          // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
-          passionname = html.find('[name="skillname"]').val();
-          let testmodifier = Number(html.find('[name="testmodifier"]').val());
-          let catmodifier = Number(html.find('[name="catmodifier"]').val());
-          let skillvalue = Number(html.find('[name="skillvalue"]').val());
-          const target = skillvalue + catmodifier + testmodifier;
-          this.basicRoll(passionname, target);
-        },
-      };
-      renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
-        new Dialog({
-          title: dialogOptions.title,
-          content: dlg,
-          buttons: {
-            rollButton: {
-              label: game.i18n.localize("Roll"),
-              callback: (html) => dialogOptions.callback(html),
-            },
-          },
-          default: "rollButton",
-        }).render(true);
-      });
-    });
-    html.find(".passion-roll").mousedown((event) => this._onPassionRoll(event));
+    // roll rune spells
+    html.find(".rune-spell-roll").click(e => this._onRuneSpellRoll(e));
 
-    /* Roll for Rune Spells
-    html.find('.runespell-roll').mousedown(event => {
-      //("casting a runespell");
-      //(event);
-      //(event.button);
-      event.preventDefault();
-      const data = this.getData();
-      if(event.button == 0) {}
-      else {return;}
-      const row= event.target.parentElement.parentElement;
-      const runename = row.dataset["rune"];
-      //(runename);
-      const spellname = row.dataset["spellname"]+" ("+runename+")";
-      const rune = this._findrune(data,runename);
-      const target = rune.value;
-      this.basicRoll(spellname,target);
+    // roll spirit spells
+    html.find(".spirit-spell-roll").click(e => this._onSpiritSpellRoll(e));
 
-    });
-    */
-
-    html.find(".elementalrunes-roll").mousedown((event) => {
-      event.preventDefault();
-      const data = this.getData().data;
-      //(data);
-      if (event.button == 0) {
-      } else {
-        return;
-      }
-      const runerow = event.target.parentElement.parentElement;
-      const runeid = runerow.dataset["rune"];
-      const charname = game.i18n.localize(data.elementalrunes[runeid].label);
-      const target = data.elementalrunes[runeid].value;
-      this.basicRoll(charname, target);
-    });
-    html.find(".powerrunes-roll").mousedown((event) => {
-      event.preventDefault();
-      const data = this.getData();
-      if (event.button == 0) {
-      } else {
-        return;
-      }
-      const runepairrow = event.target.parentElement;
-      const pairid = runepairrow.dataset["runepair"];
-      const runerow = event.target; //.parentElement;
-      const runeid = runerow.dataset["rune"];
-      const charname = game.i18n.localize(
-        data.data.powerrunes[pairid][runeid].label
-      );
-      const target = data.data.powerrunes[pairid][runeid].value;
-      this.basicRoll(charname, target);
-    });
-    html.find(".skill-roll").click((event) => this._onSkillRoll(event));
-    html.find(".rune-roll").mousedown((event) => this._onSkillRoll(event));
-    html.find(".experiencecheck").mousedown((event) => {
-      event.preventDefault();
-      const data = this.getData();
-      if (event.button == 0) {
-      } else {
-        return;
-      }
-      const skillrow = event.target.parentElement;
-      const skillid = skillrow.dataset["itemId"];
-      const skillname = skillrow.dataset["skillname"];
-      const skill = this.object.getEmbeddedDocument("Item", skillid);
-      if (skill.data.data.experience) {
-        skill.data.data.experience = false;
-      } else {
-        skill.data.data.experience = true;
-      }
-    });
-    html
-      .find(".runespell-roll")
-      .mousedown((event) => this._onRunespellRoll(event));
-    html
-      .find(".summary-skill-roll")
-      .mousedown((event) => this._onSkillRoll(event));
-    html
-      .find(".summary-characteristic-roll")
-      .mousedown((event) => this._onCharacteristicRoll(event));
-    html.find(".attack-roll").click((event) => this._onAttackRoll(event));
-    html.find(".attack-roll-ss").click((event) => this._onAttackRollSS(event));
-
-    html
-      .find(".unlock-character-sheet")
-      .click((event) => this._onLockToggle(event));
-    html
-      .find(".item")
-      .on("dragstart", (event) => RQGTools._onDragItem(event, this.actor));
-    html
-      .find(".effect-control")
-      .click((ev) =>
-        ActiveEffectRunequest.onManageActiveEffect(ev, this.actor)
-      );
+    // handle toggling of spell effects
     html.find(".spell-toggle").click(this._onSpellToggle.bind(this));
+
+    // roll attacks
+    html.find(".attack-roll").click(e => this._onAttackRoll(e));
+    // context menu for attacks
+    new ContextMenu(
+      html,
+      ".attack-roll",
+      attackMenuOptions(this.actor, this.token)
+    );
+
+    // handle dragging and dropping of items
+    html.find(".item").on("dragstart", e => RQGTools._onDragItem(e, this.actor));
+
+    html.find(".effect-control").click(e =>
+      ActiveEffectRunequest.onManageActiveEffect(e, this.actor)
+    );
+
     if (game.user.isGM) {
-      //Adding listener only available to GM users
+      // enable UI functionality only available to GM users
       html.find(".export-items").click(this._onExportItems.bind(this));
     }
   }
-  /* -------------------------------------------- */
 
-  async _onLockToggle(event) {
-    //('onLockToggle');
-    this.actor.toggleActorFlag("locked");
-    //(this.actor);
+  async _onFlagToggle(flag) {
+    this.actor.toggleActorFlag(flag);
   }
+
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
    * @param {Event} event   The originating click event
@@ -356,347 +185,308 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     delete itemData.data["type"];
 
     // Finally, create the item!
-    //return this.actor.createOwnedItem(itemData);
     return this.actor.createEmbeddedDocuments("Item", [itemData]);
   }
 
-  _onRunespellRoll(event) {
-    //("casting a runespell");
-    //(event);
-    //(event.button);
-    event.preventDefault();
-    const data = this.getData();
-    if (event.button == 0) {
-    } else {
-      return;
-    }
-    /*
-      const row= event.target.parentElement.parentElement;
-      const runename = row.dataset["rune"];
-      //(runename);
-      const spellname = row.dataset["spellname"]+" ("+runename+")";
-      const rune = this._findrune(data,runename);
-      const target = rune.value;
-      */
-    const runespellrow = event.target.parentElement.parentElement;
-    const runespellid = runespellrow.dataset["itemId"];
-    let runespell = this.actor.getEmbeddedDocument("Item", runespellid);
+  _onCharacteristicRoll(e) {
+    e.preventDefault();
+    const charId = e.target.closest(".characteristic-item").dataset["characteristic"];
+    const charData = this.getData().data.characteristics[charId];
+    renderTemplate("/systems/runequest/templates/chat/char-dialog.html", {
+      // pre-filled dialog data
+      charname: game.i18n.localize(charData.label),
+      charvalue: charData.value,
+      difficultymultiplier: 5,
+    }).then(dialogContent => new Dialog({
+      title: "Passion Roll",
+      content: dialogContent,
+      buttons: {
+        rollButton: {
+          label: game.i18n.localize("Roll"),
+          callback: html => {
+            // note that this does not execute until DiceWFRP.prepareTest() has
+            // finished and the user confirms the dialog
+            const charName = html.find('[name="charname"]').val();
+            const charValue = Number(html.find('[name="charvalue"]').val());
+            const testMod = Number(html.find('[name="testmodifier"]').val());
+            const diffMult = Number(html.find('[name="difficultymultiplier"]').val());
+            const rollTarget = (charValue * diffMult) + testMod;
+            this.basicRoll(charName, rollTarget);
+          }
+        }
+      },
+      default: "rollButton"
+    }).render(true));
+  }
 
-    let dialogOptions = {
+  _onElementalRuneRoll(e) {
+    e.preventDefault();
+    const runeId = e.target.closest(".rune-item").dataset["rune"];
+    const runeData = this.getData().data.elementalrunes[runeId];
+    const runeName = game.i18n.localize(runeData.label);
+    const rollTarget = runeData.value;
+    this.basicRoll(runeName, rollTarget);
+  }
+
+  _onPowerRuneRoll(e) {
+    e.preventDefault();
+    const runePairId = e.target.closest(".power-rune-pair").dataset["runePair"];
+    const runeId = e.target.closest(".rune-item").dataset["rune"];
+    const runeData = this.getData().data.powerrunes[runePairId][runeId];
+    const runeName = game.i18n.localize(runeData.label);
+    const rollTarget = runeData.value;
+    this.basicRoll(runeName, rollTarget);
+  }
+
+  _onPassionRoll(e) {
+    e.preventDefault();
+    const passionId = e.target.closest(".item").dataset["itemId"];
+    const passion = this.actor.getEmbeddedDocument("Item", passionId);
+    const passionName = passion.data.name;
+    const rollTarget = passion.data.data.total;
+    this.basicRoll(passionName, rollTarget);
+
+    // if (event.button == 0) {
+    //   if (event.ctrlKey == true) {
+    //     // perform gain roll
+    //     const passionid = event.currentTarget.dataset.itemId;
+    //     let passion = this.actor.getEmbeddedDocument("Item", passionid);
+    //     passion.gainroll();
+    //     return;
+    //   }
+    // } else if (event.button == 2) {
+    //   if (event.altKey == true) {
+    //     // delete item
+    //     this.actor.deleteEmbeddedDocuments("Item", [
+    //       event.currentTarget.dataset.itemid,
+    //     ]);
+    //     return;
+    //   }
+    //   // edit item
+    //   const item = this.actor.getEmbeddedDocument(
+    //     "Item",
+    //     event.currentTarget.dataset.itemid
+    //   );
+    //   item.sheet.render(true);
+    //   return;
+    // } else {
+    //   // do nothing
+    //   return;
+    // }
+
+    // event.preventDefault();
+    // const data = this.getData();
+    // if (event.button == 0) {
+    // } else {
+    //   return;
+    // }
+    // const row = event.target.parentElement.parentElement;
+    // //(row);
+    // let passionname = row.dataset["passionname"];
+    // const passionid = row.dataset["itemId"];
+    // //("passionname:"+passionname+" - passionid:"+passionid);
+    // const passion = this.actor.getEmbeddedDocument("Item", passionid);
+    // //(passion);
+    // let dialogOptions = {
+    //   title: "Passion Roll",
+    //   template: "/systems/runequest/templates/chat/skill-dialog.html",
+    //   "z-index": 100,
+    //   // Prefilled dialog data
+
+    //   data: {
+    //     skillname: passionname,
+    //     skillvalue: passion.data.data.total,
+    //     catmodifier: 0,
+    //   },
+    //   callback: (html) => {
+    //     // When dialog confirmed, fill testData dialog information
+    //     // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
+    //     passionname = html.find('[name="skillname"]').val();
+    //     let testmodifier = Number(html.find('[name="testmodifier"]').val());
+    //     let catmodifier = Number(html.find('[name="catmodifier"]').val());
+    //     let skillvalue = Number(html.find('[name="skillvalue"]').val());
+    //     const target = skillvalue + catmodifier + testmodifier;
+    //     this.basicRoll(passionname, target);
+    //   },
+    // };
+    // renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
+    //   new Dialog({
+    //     title: dialogOptions.title,
+    //     content: dlg,
+    //     buttons: {
+    //       rollButton: {
+    //         label: game.i18n.localize("Roll"),
+    //         callback: (html) => dialogOptions.callback(html),
+    //       },
+    //     },
+    //     default: "rollButton",
+    //   }).render(true);
+    // });
+  }
+
+  _onSkillRoll(e) {
+    e.preventDefault();
+    const skillId = e.currentTarget.closest(".item").dataset["itemId"];
+    const skill = this.actor.getEmbeddedDocument("Item", skillId);
+    skill.roll();
+
+    // if (e.button == 0) {
+    //   if (e.ctrlKey == true) {
+    //     const skillid = e.currentTarget.dataset.itemid;
+    //     let skill = this.actor.getEmbeddedDocument("Item", skillid);
+    //     //(skill)
+    //     skill.gainroll();
+    //     return;
+    //   }
+    // } else {
+    //   /*
+    //   else if(e.button == 2) {
+    //     if(e.altKey == true){
+    //       this.actor.deleteEmbeddedDocuments("Item",[e.currentTarget.dataset.itemid]);
+    //       return;
+    //     }
+    //     const item = this.actor.getEmbeddedDocument("Item",e.currentTarget.dataset.itemid);
+    //     item.sheet.render(true);
+    //     return;
+    //   }
+    //   */
+    //   return;
+    // }
+  }
+
+  _onRuneSpellRoll(e) {
+    e.preventDefault();
+    const actorData = this.getData().data;
+    const runeSpellId = e.target.closest(".item").dataset["itemId"];
+    const runeSpell = this.actor.getEmbeddedDocument("Item", runeSpellId);
+    renderTemplate("/systems/runequest/templates/chat/runespell-dialog.html", {
+      // pre-filled dialog data
+      runespell: runeSpell,
+      spellname: runeSpell.name,
+      data: actorData,
+      config: RQG,
+    }).then(dialogContent => new Dialog({
       title: "Runespell Casting",
-      template: "/systems/runequest/templates/chat/runespell-dialog.html",
-      "z-index": 100,
-      // Prefilled dialog data
+      content: dialogContent,
+      buttons: {
+        rollButton: {
+          label: game.i18n.localize("RQG.Roll"),
+          callback: html => {
+            // note that this does not execute until DiceWFRP.prepareTest() has
+            // finished and the user confirms the dialog
+            const spellName = html.find('[name="spellname"]').val();
+            const runeUsed = html.find('[name="runeused"]').val();
+            const rollTarget = this._findRune(actorData, runeUsed).value;
+            this.basicRoll(spellName, rollTarget);
+          }
+        }
+      },
+      default: "rollButton"
+    }).render(true));
 
-      data: {
-        runespell: runespell,
-        spellname: runespell.name,
-        data: data.data,
-        config: RQG,
-      },
-      callback: (html) => {
-        // When dialog confirmed, fill testData dialog information
-        // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
-        let runeused = html.find('[name="runeused"]').val();
-        let spellname = html.find('[name="spellname"]').val();
-        let rune = this._findrune(data, runeused);
-        let target = rune.value;
-        this.basicRoll(spellname, target);
-      },
-    };
-    renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
-      new Dialog({
-        title: dialogOptions.title,
-        content: dlg,
+    // if (e.button == 0) {
+    // } else {
+    //   return;
+    // }
+    // /*
+    //   const row= e.target.parentElement.parentElement;
+    //   const runename = row.dataset["rune"];
+    //   //(runename);
+    //   const spellname = row.dataset["spellname"]+" ("+runename+")";
+    //   const rune = this._findrune(data,runename);
+    //   const target = rune.value;
+    // */
+  }
+
+  _onSpiritSpellRoll(e) {
+    e.preventDefault();
+    const spellId = e.currentTarget.closest(".item").dataset["itemId"];
+    const spell = this.actor.getEmbeddedDocument("Item", spellId);
+    spell.roll();
+  }
+
+  _findRune(actorData, runeName) {
+    if (typeof actorData.elementalrunes[runeName] != "undefined") {
+      return actorData.elementalrunes[runeName];
+    } else {
+      for (let runePair in actorData.powerrunes) {
+        if (typeof actorData.powerrunes[runePair][runeName] != "undefined") {
+          return actorData.powerrunes[runePair][runeName];
+        }
+      }
+      return actorData.elementalrunes["air"];
+    }
+  }
+
+  _onAttackRoll(e) {
+    e.preventDefault();
+    const actorData = this.getData().data;
+    const targetDefense = 0;
+    const attackId = e.currentTarget.closest(".item").dataset["itemId"];
+
+    if (game.user.targets.size > 0) {
+      const targets = Array.from(game.user.targets);
+      targetDefense = targets[0].actor.data.data.defense[0]
+        ? targets[0].actor.data.data.defense[0]
+        : null;
+    }
+
+    if (!attackId) {
+      renderTemplate("/systems/runequest/templates/chat/attack-dialog.html", {
+        // pre-filled dialog data
+        attacks: actorData.attacks,
+        data: actorData,
+        targetdefense: targetDefense,
+      }).then(dialogContent => new Dialog({
+        title: "Attack Roll",
+        content: dialogContent,
         buttons: {
           rollButton: {
             label: game.i18n.localize("RQG.Roll"),
-            callback: (html) => dialogOptions.callback(html),
-          },
+            callback: html => {
+              // note that this does not execute until DiceWFRP.prepareTest()
+              // has finished and the user confirms the dialog
+              const attackId = html.find('[name="attackname"]').val();
+              const attack = this.actor.getEmbeddedDocument("Item", attackId);
+              const testModifier = Number(html.find('[name="testmodifier"]').val());
+              const testData = { testmodifier: testModifier };
+              attack.roll(testData);
+            }
+          }
         },
-        default: "rollButton",
-      }).render(true);
+        default: "rollButton"
+      }).render(true));
+    } else {
+      const attack = this.actor.getEmbeddedDocument("Item", attackId);
+      attack.roll({ targetdefense: targetDefense });
+    }
+  }
+
+  async basicRoll(charName, rollTarget) {
+    // perform roll
+    const roll = await new Roll("1d100").roll();
+    const result = this._getRollResult(roll.total, rollTarget);
+
+    // render the chat card template
+    const template = "systems/runequest/templates/chat/skill-card.html";
+    const html = await renderTemplate(template, {
+      actor: this.actor,
+      item: this.object.data,
+      charname: charName,
+      target: rollTarget,
+      roll: roll,
+      result: result,
     });
-  }
-  _onSpiritSpellRoll(event) {
-    event.preventDefault();
-    const spellid = event.currentTarget.dataset.itemId;
-    let spell = this.actor.getEmbeddedDocument("Item", spellid);
-    spell.roll();
-  }
-  _onAttackRoll(event) {
-    event.preventDefault();
-    const data = this.getData();
-    let targetdefense = 0;
-    //("starting _onAttackRoll");
-    //(data.data);
-    if (event.button == 0) {
-    } else {
-      return;
-    }
-    const attackrow = event.target.parentElement.parentElement;
-    const attackid = attackrow.dataset["itemId"];
-    console.log(game.user.targets);
-    if (game.user.targets.size > 0) {
-      let targets = Array.from(game.user.targets);
-      console.log(targets[0].actor);
-      targetdefense = targets[0].actor.data.data.defense[0]
-        ? targets[0].actor.data.data.defense[0]
-        : null;
-      console.log(targetdefense);
-    }
-    if (!attackid) {
-      let dialogOptions = {
-        title: "Attack Roll",
-        template: "/systems/runequest/templates/chat/attack-dialog.html",
-        "z-index": 100,
-        // Prefilled dialog data
 
-        data: {
-          attacks: data.data.attacks,
-          data: data.data,
-          targetdefense: targetdefense,
-        },
-        callback: (html) => {
-          // When dialog confirmed, fill testData dialog information
-          // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
-          let attackid = html.find('[name="attackname"]').val();
-          let testmodifier = Number(html.find('[name="testmodifier"]').val());
-          let attack = this.actor.getEmbeddedDocument("Item", attackid);
-          let testData = { testmodifier: testmodifier };
-          //("_onAttackRoll-attack");
-          //(attack);
-          attack.roll(testData);
-          //this.genericAttackRoll(attack);
-        },
-      };
-      renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
-        new Dialog({
-          title: dialogOptions.title,
-          content: dlg,
-          buttons: {
-            rollButton: {
-              label: game.i18n.localize("RQG.Roll"),
-              callback: (html) => dialogOptions.callback(html),
-            },
-          },
-          default: "rollButton",
-        }).render(true);
-      });
-    } else {
-      let attack = this.actor.getEmbeddedDocument("Item", attackid);
-      //("_onAttackRoll-attack");
-      //(attack);
-      attack.roll({ targetdefense: targetdefense });
-    }
-  }
-  _onCharacteristicRoll(event) {
-    event.preventDefault();
-    const characid =
-      event.currentTarget.closest(".characteristic").dataset.characteristicId;
-    const data = this.getData();
-    if (event.button == 0) {
-      const row = event.target.parentElement.parentElement;
-      let charname = game.i18n.localize(
-        data.data.characteristics[characid].label
-      );
-      let charvalue = data.data.characteristics[characid].value;
-      let difficultymultiplier = 5;
-      let dialogOptions = {
-        title: "Characteristic Roll",
-        template: "/systems/runequest/templates/chat/char-dialog.html",
-        "z-index": 100,
-        // Prefilled dialog data
-
-        data: {
-          charname: charname,
-          charvalue: charvalue,
-          difficultymultiplier: difficultymultiplier,
-        },
-        callback: (html) => {
-          // When dialog confirmed, fill testData dialog information
-          // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
-          charname = html.find('[name="charname"]').val();
-          let testmodifier = Number(html.find('[name="testmodifier"]').val());
-          difficultymultiplier = Number(
-            html.find('[name="difficultymultiplier"]').val()
-          );
-          charvalue = Number(html.find('[name="charvalue"]').val());
-          const target = charvalue * difficultymultiplier + testmodifier;
-          this.basicRoll(charname, target);
-        },
-      };
-      renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
-        new Dialog({
-          title: dialogOptions.title,
-          content: dlg,
-          buttons: {
-            rollButton: {
-              label: game.i18n.localize("Roll"),
-              callback: (html) => dialogOptions.callback(html),
-            },
-          },
-          default: "rollButton",
-        }).render(true);
-      });
-    } else if (event.button == 2) {
-      //Resistance roll
-      const row = event.target.parentElement.parentElement;
-      let charname = game.i18n.localize(
-        data.data.characteristics[characid].label
-      );
-      let charvalue = data.data.characteristics[characid].value;
-      let difficultymultiplier = 5;
-      let dialogOptions = {
-        title: "Resistance Roll",
-        template: "/systems/runequest/templates/chat/resistance-dialog.html",
-        "z-index": 100,
-        // Prefilled dialog data
-
-        data: {
-          charname: charname,
-          charvalue: charvalue,
-          passive: 10,
-        },
-        callback: (html) => {
-          // When dialog confirmed, fill testData dialog information
-          // Note that this does not execute until DiceWFRP.prepareTest() has finished and the user confirms the dialog
-          charname =
-            html.find('[name="charname"]').val() + " - Resistance Roll";
-          let passive = Number(html.find('[name="passive"]').val());
-          charvalue = Number(html.find('[name="charvalue"]').val());
-          const target = 50 + (charvalue - passive) * 5;
-          this.basicRoll(charname, target);
-        },
-      };
-      renderTemplate(dialogOptions.template, dialogOptions.data).then((dlg) => {
-        new Dialog({
-          title: dialogOptions.title,
-          content: dlg,
-          buttons: {
-            rollButton: {
-              label: game.i18n.localize("Roll"),
-              callback: (html) => dialogOptions.callback(html),
-            },
-          },
-          default: "rollButton",
-        }).render(true);
-      });
-    }
-    //return item.roll();
-  }
-  _onSkillRoll(event) {
-    event.preventDefault();
-    const data = this.getData();
-    //(event);
-    if (event.button == 0) {
-      if (event.ctrlKey == true) {
-        const skillid = event.currentTarget.dataset.itemid;
-        let skill = this.actor.getEmbeddedDocument("Item", skillid);
-        //(skill)
-        skill.gainroll();
-        return;
-      }
-    } else {
-    /*
-    else if(event.button == 2) {
-      if(event.altKey == true){
-        this.actor.deleteEmbeddedDocuments("Item",[event.currentTarget.dataset.itemid]);
-        return;
-      }
-      const item = this.actor.getEmbeddedDocument("Item",event.currentTarget.dataset.itemid);
-      item.sheet.render(true);
-      return;
-    }
-    */
-      return;
-    }
-    //const catrow = event.target.parentElement.parentElement.parentElement;
-    const skillid = event.currentTarget.dataset.itemid;
-    let skill = this.actor.getEmbeddedDocument("Item", skillid);
-    //("_onSkillRoll");
-    //(skill);
-    skill.roll();
-  }
-  _onPassionRoll(event) {
-    event.preventDefault();
-    const data = this.getData();
-    //(event);
-    if (event.button == 0) {
-      if (event.ctrlKey == true) {
-        const passionid = event.currentTarget.dataset.itemId;
-        let passion = this.actor.getEmbeddedDocument("Item", passionid);
-        //(passion)
-        passion.gainroll();
-        return;
-      }
-    } else if (event.button == 2) {
-      if (event.altKey == true) {
-        this.actor.deleteEmbeddedDocuments("Item", [
-          event.currentTarget.dataset.itemid,
-        ]);
-        return;
-      }
-      const item = this.actor.getEmbeddedDocument(
-        "Item",
-        event.currentTarget.dataset.itemid
-      );
-      item.sheet.render(true);
-      return;
-    } else {
-      return;
-    }
-    //const catrow = event.target.parentElement.parentElement.parentElement;
-    const passionid = event.currentTarget.dataset.itemId;
-    let passion = this.actor.getEmbeddedDocument("Item", passionid);
-    //("_onPassionRoll");
-    //(passion);
-    passion.roll();
-  }
-  async basicRoll(charname, target) {
-    const critical = Math.max(Math.round(target / 20), 1);
-    const special = Math.round(target / 5);
-    const fumblerange = Math.round((100 - target) / 20);
-    const fumble = 100 - Math.max(fumblerange, 0);
-    let roll = new Roll("1d100");
-    roll = await roll.roll();
-    let result;
-
-    if ((roll.total < 96 && roll.total <= target) || roll.total <= 5) {
-      //This is a success we check type of success
-      if (roll.total <= critical) {
-        result = "critical";
-      } else {
-        if (roll.total <= special) {
-          result = "special";
-        } else {
-          result = "success";
-        }
-      }
-    } else {
-      if (roll.total >= fumble) {
-        result = "fumble";
-      } else {
-        result = "failure";
-      }
+    // "whisper" blind rolls to GM
+    let chatWhisper = null;
+    const rollMode = game.settings.get("core", "rollMode");
+    if (["gmroll", "blindroll"].includes(rollMode)) {
+      chatWhisper = ChatMessage.getWhisperRecipients("GM");
     }
 
-    const templateData = {
-      actor: this.actor,
-      item: this.object.data,
-      charname: charname,
-      target: target,
-      roll: roll,
-      result: result,
-    };
-    // Render the chat card template
-
-    const template = `systems/runequest/templates/chat/skill-card.html`;
-    const html = await renderTemplate(template, templateData);
-
-    // Basic chat message data
-
-    const chatData = {
+    // send rendered chat card to chat log
+    ChatMessage.create({
       user: game.user.id,
       content: html,
       speaker: {
@@ -704,63 +494,38 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
         token: this.actor.token,
         alias: this.actor.name,
       },
-    };
+      whisper: chatWhisper,
+      blind: (rollMode === "blindroll")
+    });
 
-    // Toggle default roll mode
-    let rollMode = game.settings.get("core", "rollMode");
-    if (["gmroll", "blindroll"].includes(rollMode))
-      chatData["whisper"] = ChatMessage.getWhisperRecipients("GM");
-    if (rollMode === "blindroll") chatData["blind"] = true;
-
-    // Create the chat message
-
-    ChatMessage.create(chatData);
     return result;
   }
-  async gainRoll(charname, target) {
-    const critical = Math.max(Math.round(target / 20), 1);
-    const special = Math.round(target / 5);
-    const fumblerange = Math.round((100 - target) / 20);
-    const fumble = 100 - Math.max(fumblerange, 0);
-    let roll;
-    roll = await new Roll("1d100").roll();
-    let result;
 
-    if ((roll.total < 96 && roll.total <= target) || roll.total <= 5) {
-      //This is a success we check type of success
-      if (roll.total <= critical) {
-        result = "critical - No gain";
-      } else {
-        if (roll.total <= special) {
-          result = "special - No Gain";
-        } else {
-          result = "success - No Gain";
-        }
-      }
-    } else {
-      if (roll.total >= fumble) {
-        result = "fumble - You gain 1d6";
-      } else {
-        result = "failure - You gain 1d6";
-      }
-    }
+  async gainRoll(charName, rollTarget) {
+    // perform roll
+    const roll = await new Roll("1d100").roll();
+    const result = this._getRollResult(roll.total, rollTarget);
 
-    const templateData = {
+    // render the chat card template
+    const template = "systems/runequest/templates/chat/skill-card.html";
+    const html = await renderTemplate(template, {
       actor: this.actor,
       item: this.object.data,
-      charname: charname,
-      target: target,
+      charname: charName,
+      target: rollTarget,
       roll: roll,
       result: result,
-    };
-    // Render the chat card template
+    });
 
-    const template = `systems/runequest/templates/chat/skill-card.html`;
-    const html = await renderTemplate(template, templateData);
+    // "whisper" blind rolls to GM
+    let chatWhisper = null;
+    const rollMode = game.settings.get("core", "rollMode");
+    if (["gmroll", "blindroll"].includes(rollMode)) {
+      chatWhisper = ChatMessage.getWhisperRecipients("GM");
+    }
 
-    // Basic chat message data
-
-    const chatData = {
+    // send rendered chat card to chat log
+    ChatMessage.create({
       user: game.user.id,
       content: html,
       speaker: {
@@ -768,250 +533,170 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
         token: this.actor.token,
         alias: this.actor.name,
       },
-    };
+      whisper: chatWhisper,
+      blind: (rollMode === "blindroll")
+    });
 
-    // Toggle default roll mode
-    let rollMode = game.settings.get("core", "rollMode");
-    if (["gmroll", "blindroll"].includes(rollMode))
-      chatData["whisper"] = ChatMessage.getWhisperRecipients("GM");
-    if (rollMode === "blindroll") chatData["blind"] = true;
-
-    // Create the chat message
-
-    ChatMessage.create(chatData);
     return result;
   }
+
   /**
    * Handle rolling of an item from the Actor sheet, obtaining the Item instance and dispatching to it's roll method
    * @private
    */
-  _onItemRoll(event) {
-    event.preventDefault();
-    const itemId = event.currentTarget.closest(".item").dataset.itemId;
+  _onItemRoll(e) {
+    e.preventDefault();
+    const itemId = e.currentTarget.closest(".item").dataset["itemId"];
     const item = this.actor.getEmbeddedDocument("Item", itemId);
     return item.roll();
   }
 
   async genericAttackRoll(attack) {
     const data = this.getData();
-    let categoryid = attack.data.data.attacktype + "weapons";
-    const skillname = game.i18n.localize(
+    const categoryId = attack.data.data.attacktype + "weapons";
+    const skillName = game.i18n.localize(
       RQG.weaponskills[attack.data.data.skillused]
     );
-    const damagebonus = attack.options.actor.data.data.attributes.damagebonus;
-    const skillused = data.actor.skills[categoryid].find(function (element) {
-      return element.name == skillname;
-    });
-    const categorymod =
-      attack.options.actor.data.data.skillcategory[categoryid].modifier;
-    let target = skillused.data.total + categorymod;
-    const critical = Math.max(Math.round(target / 20), 1);
-    const special = Math.round(target / 5);
-    const fumblerange = Math.round((100 - target) / 20);
-    const fumble = 100 - Math.max(fumblerange, 0);
-    let roll;
-    roll = await new Roll("1d100").roll();
+    const damageBonus = attack.options.actor.data.data.attributes.damagebonus;
+    const skillUsed = data.actor.skills[categoryId].find(skill => skill.name == skillName);
+    const categoryModifier =
+      attack.options.actor.data.data.skillcategory[categoryId].modifier;
+    const rollTarget = skillUsed.data.total + categoryModifier;
+
+    const roll = await new Roll("1d100").roll();
+    const result = this._getRollResult(roll.total, rollTarget);
+
+    this.htmldamageroll(roll, rollTarget, result, attack, damageBonus);
+  }
+
+  async _updateObject(e, formData) {
+    const target = e?.currentTarget;
+    if (target?.classList?.contains("power-rune-input")) {
+      if (Number(target.value)) {
+        const runePairId = target.closest(".power-rune-pair").dataset["runePair"];
+        const runeId = target.closest(".rune-item").dataset["rune"];
+        const otherRuneId = this._getOtherRuneInPair(runePairId, runeId);
+        const formDataId = `data.powerrunes.${runePairId}.${otherRuneId}.value`;
+        formData[formDataId] = 100 - parseInt(target.value);
+      }
+    }
+    if (target?.classList?.contains("hitlocation-wounds")) {
+      const hitLocation = this._getActorItemViaTarget(target);
+      const value = Number(target.value) ? parseInt(target.value) : 0;
+      await hitLocation?.update({ [target.name]: value });
+    }
+    if (target?.classList?.contains("mpstorage-current")) {
+      const mpStorage = this._getActorItemViaTarget(target);
+      const value = Number(target.value) ? parseInt(target.value) : 0;
+      await mpStorage?.update({ [target.name]: value });
+    }
+    if (target?.classList?.contains("mpstorage-equiped")) {
+      const mpStorage = this._getActorItemViaTarget(target);
+      await mpStorage?.update({ [target.name]: target.checked });
+    }
+    if (target?.classList?.contains("skill-experience")) {
+      const skill = this._getActorItemViaTarget(target);
+      await skill?.update({ [target.name]: target.checked });
+    }
+    if (target?.classList?.contains("passion-experience")) {
+      const passion = this._getActorItemViaTarget(target);
+      await passion?.update({ [target.name]: target.checked });
+    }
+    // if (target?.classList?.contains("attacks")) {
+    //   const attack = this._getActorItemViaTarget(target);
+    //   if (attack) {
+    //     let value = null;
+    //     if (target.dataset.dtype === "Number") {
+    //       value = target.value
+    //         ? parseInt(target.value)
+    //         : null;
+    //     } else {
+    //       value = target.value;
+    //     }
+    //     if (target.name !== "data.name") {
+    //       if (!target.value) {
+    //         await attack.update({ [target.name]: null });
+    //       } else {
+    //         await attack.update({ [target.name]: value });
+    //       }
+    //     } else {
+    //       if (!target.value) {
+    //         await attack.update({ ["name"]: null });
+    //       } else {
+    //         await attack.update({ ["name"]: value });
+    //       }
+    //     }
+    //   }
+    // }
+    if (target?.classList?.contains("attacks-db")) {
+      const attack = this._getActorItemViaTarget(target);
+      await attack?.update({ [target.name]: target.checked });
+    }
+    return this.object.update(formData);
+  }
+
+  _getOtherRuneInPair(runePair, rune) {
+    const runePairFirstPart = runePair.substring(0, rune.length);
+    const runePairLastPart = runePair.substring(runePair.length - rune.length, runePair.length);
+    if (runePairFirstPart == rune) {
+      return runePair.substring(rune.length, runePair.length);
+    } else if (runePairLastPart == rune) {
+      return runePair.substring(0, runePair.length - rune.length);
+    } else {
+      return null;
+    }
+  }
+
+  _getActorItemViaTarget(target) {
+    return this.actor.items.get(target.closest(".item").dataset.itemId);
+  }
+
+  _getRollResult(roll, rollTarget) {
+    const criticalThreshold = Math.max(Math.round(rollTarget / 20), 1);
+    const specialThreshold = Math.round(rollTarget / 5);
+    const fumbleRange = Math.round((100 - rollTarget) / 20);
+    const fumbleThreshold = 100 - Math.max(fumbleRange, 0);
     let result;
 
-    if ((roll.total < 96 && roll.total <= target) || roll.total <= 5) {
-      //This is a success we check type of success
-      if (roll.total <= critical) {
+    // check roll result
+    if ((roll < 96 && roll <= rollTarget) || roll <= 5) {
+      // success
+      if (roll <= criticalThreshold) {
         result = "critical";
+      } else if (roll <= specialThreshold) {
+        result = "special";
       } else {
-        if (roll.total <= special) {
-          result = "special";
-        } else {
-          result = "success";
-        }
+        result = "success";
       }
     } else {
-      if (roll.total >= fumble) {
+      // failure
+      if (roll >= fumbleThreshold) {
         result = "fumble";
       } else {
         result = "failure";
       }
     }
-    this.htmldamageroll(roll, target, result, attack, damagebonus);
-  }
-  _findrune(data, runename) {
-    if (typeof data.data.elementalrunes[runename] != "undefined") {
-      return data.data.elementalrunes[runename];
-    } else {
-      for (let rp in data.data.powerrunes) {
-        if (typeof data.data.powerrunes[rp][runename] != "undefined") {
-          return data.data.powerrunes[rp][runename];
-        }
-      }
-      return data.data.elementalrunes.air;
-    }
-  }
-  async _updateObject(event, formData) {
-    //("_updateObjet");
-    //(event);
-    //(formData);
-    const actor = this.getData().actor;
-    const skills = actor.data.data.skills;
-    const hitLocations = actor.data.data.hitlocations;
-    if (event.target) {
-      //(event.currentTarget.classList);
-      if (event.currentTarget.classList) {
-        //(event.currentTarget.classList);
-        if (event.currentTarget.classList.contains("hitloc-wounds")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let hl = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemid
-          );
-          //(hl);
 
-          if (hl) {
-            const value = event.currentTarget.value
-              ? parseInt(event.currentTarget.value)
-              : null;
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            if (!event.currentTarget.value) {
-              await hl.update({ [event.currentTarget.name]: null });
-            } else if (!isNaN(value)) {
-              await hl.update({ [event.currentTarget.name]: value });
-            }
-            //(hl);
-          }
-        }
-        if (event.currentTarget.classList.contains("mpstorage-current")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let mpstorage = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemId
-          );
-          //(mpstorage);
-          if (mpstorage) {
-            const value = event.currentTarget.value
-              ? parseInt(event.currentTarget.value)
-              : null;
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            if (!event.currentTarget.value) {
-              await mpstorage.update({ [event.currentTarget.name]: null });
-            } else if (!isNaN(value)) {
-              await mpstorage.update({ [event.currentTarget.name]: value });
-            }
-            //(mpstorage);
-          }
-        }
-        if (event.currentTarget.classList.contains("mpstorage-equiped")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let mpstorage = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemId
-          );
-          //(mpstorage);
-          //(event.currentTarget.value);
-          if (mpstorage) {
-            const value = event.currentTarget.checked ? true : false;
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            await mpstorage.update({ [event.currentTarget.name]: value });
-            //(mpstorage);
-          }
-        }
-        if (event.currentTarget.classList.contains("skill-experience")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let skill = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemId
-          );
-          //(skill);
-          //(event.currentTarget.value);
-          if (skill) {
-            const value = event.currentTarget.checked ? true : false;
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            await skill.update({ [event.currentTarget.name]: value });
-            //(skill);
-          }
-        }
-        if (event.currentTarget.classList.contains("passion-experience")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let passion = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemId
-          );
-          //(passion);
-          //(event.currentTarget.value);
-          if (passion) {
-            const value = event.currentTarget.checked ? true : false;
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            await passion.update({ [event.currentTarget.name]: value });
-            //(passion);
-          }
-        }
-        if (event.currentTarget.classList.contains("attacks")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let attack = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemId
-          );
-          //(attack);
-          if (attack) {
-            let value = null;
-            if (event.currentTarget.dataset.dtype === "Number") {
-              value = event.currentTarget.value
-                ? parseInt(event.currentTarget.value)
-                : null;
-            } else {
-              value = event.currentTarget.value;
-            }
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            if (event.currentTarget.name !== "data.name") {
-              if (!event.currentTarget.value) {
-                await attack.update({ [event.currentTarget.name]: null });
-              } else {
-                await attack.update({ [event.currentTarget.name]: value });
-              }
-            } else {
-              if (!event.currentTarget.value) {
-                await attack.update({ ["name"]: null });
-              } else {
-                await attack.update({ ["name"]: value });
-              }
-            }
-            //(attack);
-          }
-        }
-        if (event.currentTarget.classList.contains("attacks-db")) {
-          //(event.currentTarget.closest('.item').dataset);
-          let attack = this.actor.items.get(
-            event.currentTarget.closest(".item").dataset.itemId
-          );
-          //(attack);
-          //(event.currentTarget.value);
-          if (attack) {
-            const value = event.currentTarget.checked ? true : false;
-            //("value:"+value);
-            //("name:"+event.currentTarget.name);
-            await attack.update({ [event.currentTarget.name]: value });
-            //(attack);
-          }
-        }
-      }
-    }
-    return this.object.update(formData);
+    return result;
   }
+
   _prepareSkill(skill) {
+    // calculate total skill value
     skill.data.total = skill.data.base + skill.data.increase;
   }
   _preparePassion(passion) {
-    passion.data.total =
-      passion.data.base + passion.data.increase + passion.data.modifier;
+    // calculate total passion value
+    const { base, increase, modifier } = passion.data;
+    passion.data.total = base + increase + modifier;
   }
   _preparehitlocation(hitlocation, actorData) {
-    // Prepare the HitLocations by calculating the Max HP of the location and the remaining HP based on wounds
-    //(hitlocation);
-    hitlocation.data.data.maxhp =
-      hitlocation.data.data.basehp + actorData.data.attributes.hpmodifier;
-    hitlocation.data.data.currenthp =
-      hitlocation.data.data.maxhp - hitlocation.data.data.wounds;
+    const { basehp, wounds } = hitlocation.data.data;
+    // calculate max HP of the location
+    hitlocation.data.data.maxhp = basehp + actorData.data.attributes.hpmodifier;
+    // calculate remaining HP of the location based on wounds
+    hitlocation.data.data.currenthp = hitlocation.data.data.maxhp - wounds;
   }
-  _onAttackRollSS(event) {
-    this._onAttackRoll(event);
-  }
+
   async _onSpellToggle(event) {
     const spellid = event.currentTarget.closest(".item").dataset.itemId;
     const spell = this.actor.items.get(spellid);
@@ -1029,6 +714,7 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     }
     return spell.update({ "data.active": spellstatus });
   }
+
   async _onExportItems(event) {
     // This function will export Actor Owned items to a new directory in the Items Directory.
     // To be improved with more features as we go.

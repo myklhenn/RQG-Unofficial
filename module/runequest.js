@@ -155,23 +155,23 @@ Handlebars.registerHelper("getcharacterattackskills", function(actorid, attackty
 // Added Helpers to Handlebars
 Handlebars.registerHelper("getruneletter", function(runeid) {
   const runes= {
-    "air": "A",
-    "fire": "f",
-    "darkness": "D",
-    "water": "Z",
+    "air": "g",
+    "fire": ".",
+    "darkness": "o",
+    "water": "w",
     "earth": "e",
-    "moon": "6",
-    "man": "M",
+    "moon": "/",
+    "man": ",",
     "beast": "B",
-    "fertility": "X",
-    "death": "T",
-    "harmony": "H",
-    "disorder": "J",
-    "truth": "Y",
-    "illusion": "I",
-    "stasis": "U",
-    "movement": "V",
-    "chaos": "C"
+    "fertility": "x",
+    "death": "t",
+    "harmony": "l",
+    "disorder": "j",
+    "truth": "y",
+    "illusion": "i",
+    "stasis": "c",
+    "movement": "s",
+    "chaos": "?"
   }
   return runes[runeid];
 });
@@ -202,4 +202,11 @@ Handlebars.registerHelper({
 });
 Handlebars.registerHelper("getGameSetting", function(setting) {
   return game.settings.get("Runequest",setting);
+});
+Handlebars.registerHelper("addCatModifierToSkill", function(skillCatList, skillCat, skillTotal) {
+  let catModifier = 0;
+  if (skillCat != "others" && skillCat != "spiritweapons") {
+    catModifier = skillCatList[skillCat].modifier;
+  }
+  return skillTotal + catModifier;
 });

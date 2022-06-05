@@ -1,0 +1,14 @@
+<div class="flexrow characteristic-row">
+    {{#each data.characteristics as |char id| }}
+    <div class="characteristic-item" data-characteristic="{{id}}">
+        <label class="characteristic-label characteristic-roll">
+            <span class="characteristic-rune">{{getruneletter char.rune}}</span>
+            {{localize char.label}}
+        </label>
+        <input type="text" name="data.characteristics.{{id}}.base" value="{{char.base}}" data-dtype="Number">
+        {{#if (isdefined char.experience)}}
+        <input type="checkbox" name="data.characteristics.{{id}}.experience" {{checked char.experience}}>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>

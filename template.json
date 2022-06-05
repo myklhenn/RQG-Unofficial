@@ -37,45 +37,53 @@
       },
       "characteristics":{
         "strength": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "rune": "air",
           "label": "RQG.STR"
         },
         "constitution": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "rune": "earth",
           "label": "RQG.CON"
         },
         "size": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "rune": "darkness",
           "label": "RQG.SIZ"
         },
         "intelligence": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "rune": "fire",
           "label": "RQG.INT"
         },
         "power": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "experience": false,
+          "rune": "moon",
           "label": "RQG.POW"
         },
         "dexterity": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "rune": "water",
           "label": "RQG.DEX"
         },
         "charisma": {
-          "base":0,
+          "base": 0,
           "value": 0,
           "modifier": [],
+          "rune": "",
           "label": "RQG.CHA"
         }
       },
@@ -123,10 +131,11 @@
         "naturalweapons": {
           "label": "RQG.NaturalWeapons",
           "modifier": 0
-        }      
+        }
       },
       "flags": {
-        "locked": true
+        "locked": true,
+        "sumskillcatmodifier": false
       },
       "elementalrunes": {
         "air": {
@@ -137,7 +146,7 @@
         "fire": {
           "value": 0,
           "label": "RQG.Fire",
-          "experience":false          
+          "experience":false
         },
         "darkness": {
           "value": 0,
@@ -222,7 +231,7 @@
           }
         }
       },
-      "cults": []  
+      "cults": []
     },
     "humanoid":{}
   },
@@ -428,7 +437,7 @@
         "movement": true
       }
     }
-  },  
+  },
   "item": {
     "name": "",
     "templates": ["description"],
@@ -512,7 +521,7 @@
     "currentrunepoint": 3,
     "maxrunepoint": 3,
     "subcult": "",
-    "spells": []    
+    "spells": []
   },
   "armor": {
     "name": "",
@@ -600,7 +609,7 @@
     "name": "",
     "templates": ["description"],
     "points": 0,
-    "rune": ""    
+    "rune": ""
   },
   "attack":{
     "name": "",
@@ -610,16 +619,16 @@
     "range": 0,
     "rate": "",
     "amno": 0
-  },  
+  },
   "spellmatrix": {
     "name": "",
     "templates": ["description"],
-    "spell": []    
+    "spell": []
   },
   "sorceryrune": {
     "name": "",
     "templates": ["description"],
-    "mastered": false    
+    "mastered": false
   },
   "sorceryspell": {
     "name": "",
@@ -640,7 +649,7 @@
     "result": "",
     "rewards": "",
     "reputationchange": 0,
-    "killed":false  
+    "killed":false
   },
   "rune": {
     "name":"",
@@ -705,7 +714,7 @@
     "skills": [],
     "runes": [],
     "passions": [],
-    "hitlocationstype": "Humanoids"  
+    "hitlocationstype": "Humanoids"
   },
   "occupation": {
     "templates": ["description"],

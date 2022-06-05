@@ -1,0 +1,32 @@
+<div class="power-rune-section">
+	<header class="title">Power Runes/Forms</header>
+	<div class="flexrow power-rune-row">
+		{{#each data.powerrunes as |runepair pairid| }}
+		<div class="flexrow power-rune-pair" data-rune-pair="{{pairid}}">
+			{{#each runepair as |rune runeid| }}
+			<div class="flexrow rune-item" data-rune="{{runeid}}">
+				<img
+					class="rune-img power-rune-roll"
+					src="/systems/runequest/styles/img/{{runeid}}.png"
+					title="{{localize rune.label}}"
+					alt="{{localize rune.label}}"
+				/>
+				<div class="rune-content">
+					<label>{{localize rune.label}}</label>
+					<div class="rune-inputs">
+						<input
+							class="power-rune-input"
+							type="text"
+							name="data.powerrunes.{{pairid}}.{{runeid}}.value"
+							value="{{rune.value}}"
+							data-dtype="Number"
+						/>
+						<input type="checkbox" name="data.powerrunes.{{pairid}}.{{runeid}}.experience" {{checked rune.experience}}>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+		</div>
+		{{/each}}
+	</div>
+</div>

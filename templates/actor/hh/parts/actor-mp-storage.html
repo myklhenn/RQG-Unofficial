@@ -1,0 +1,45 @@
+<table class="mp-storage-table hh-table">
+    <thead>
+        <th>{{localize "RQG.MPStorage"}}</th>
+        <th>{{localize "RQG.CurrentMP"}}</th>
+        <th>{{localize "RQG.MaxMP"}}</th>
+        <th>{{localize "RQG.Equiped"}}</th>
+        <th>
+            <a class="item-control item-create" title="Create item" data-type="mpstorage">
+                <i class="fas fa-plus"></i>
+            </a>
+        </th>
+    </thead>
+    <tbody>
+        {{#if data.mpstorage}}
+        {{#each data.mpstorage as |storage id|}}
+        <tr class="item" data-item-id="{{storage.id}}">
+            <td>{{localize storage.name}}</td>
+            <td>
+                <input class="mpstorage-current mpstorage-input" id="{{id}}_{{storage.id}}_currentmp_mpstorage" type="text" name="data.currentmp" value="{{storage.data.data.currentmp}}"/>
+            </td>
+            <td>
+                <input class="attribute-display" type="text" value="{{storage.data.data.maxmp}}" disabled>
+            </td>
+            <td>
+                <input class="mpstorage-equiped" id="{{id}}_{{storage.id}}_mpstorage_equiped" type="checkbox" name="data.equiped" {{checked storage.data.data.equiped}}/>
+            </td>
+            <td>
+                <a class="item-control item-edit" title="Edit Item">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a class="item-control item-delete" title="Delete Item">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="5" class="empty-table-message">
+                <a>Add MP storage...</a>
+            </td>
+        </tr>
+        {{/if}}
+    </tbody>
+</table>
