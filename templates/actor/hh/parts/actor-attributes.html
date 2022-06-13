@@ -1,20 +1,19 @@
 <table class="attributes-table hh-table">
-    {{#with data.attributes as |attr| }}
 	<tbody>
 		<tr>
 			<td>
 				{{localize 'RQG.HP'}}
 				<progress
 					class="attribute-progress"
-					value="{{attr.hitpoints.value}}"
-					max="{{attr.hitpoints.max}}"
+					value="{{data.attributes.hitpoints.value}}"
+					max="{{data.attributes.hitpoints.max}}"
 				></progress>
 			</td>
 			<td>
 				<input
 					class="attribute-display"
 					type="text"
-					value="{{attr.hitpoints.value}} / {{attr.hitpoints.max}}"
+					value="{{data.attributes.hitpoints.value}} / {{data.attributes.hitpoints.max}}"
 					disabled
 				/>
 			</td>
@@ -26,8 +25,7 @@
 					class="attribute-input"
 					type="text"
 					name="data.attributes.generalwounds"
-					value="{{attr.generalwounds}}"
-					data-dtype="Number"
+					value="{{data.attributes.generalwounds}}"
 				/>
 			</td>
 		</tr>
@@ -37,15 +35,15 @@
 				<progress
 					class="attribute-progress"
 					id="hitpoints"
-					value="{{attr.magicpoints.value}}"
-					max="{{attr.magicpoints.max}}"
+					value="{{data.attributes.magicpoints.value}}"
+					max="{{data.attributes.magicpoints.max}}"
 				></progress>
 			</td>
 			<td>
 				<input
 					class="attribute-display"
 					type="text"
-					value="{{attr.magicpoints.value}} / {{attr.magicpoints.max}}"
+					value="{{data.attributes.magicpoints.value}} / {{data.attributes.magicpoints.max}}"
 					disabled
 				/>
 			</td>
@@ -56,7 +54,7 @@
 				<input
 					class="attribute-display"
 					type="text"
-					value="{{attr.sizsr}}"
+					value="{{data.attributes.sizsr}}"
 					disabled
 				/>
 			</td>
@@ -117,5 +115,4 @@
 			</td>
 		</tr>
 	</tbody>
-    {{/with}}
 </table>
