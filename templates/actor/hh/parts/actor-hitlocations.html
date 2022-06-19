@@ -28,20 +28,20 @@
             </td>
             {{#if ../../data.flags.locked}}
             <td>
-                <input class="attribute-display" type="text" value="{{hldata.armor}}" disabled>
+                <input class="attribute-display" type="number" value="{{hldata.armor}}" disabled>
             </td>
             <td>
-                <input id="{{hl.id}}_wounds" class="attribute-input hitlocation-wounds" type="text" name="data.wounds" value="{{hldata.wounds}}">
+                <input id="{{hl.id}}_wounds" class="attribute-input hitlocation-wounds" type="number" name="data.wounds" value="{{hldata.wounds}}">
             </td>
             {{else}}
             <td>
-                <input class="attribute-display" type="text" value="{{hldata.maxhp}}" disabled>
+                <input class="attribute-display" type="number" value="{{hldata.maxhp}}" disabled>
             </td>
             <td>
-                <input id="{{hl.id}}_armor" class="attribute-value hitloc-armor" type="text" name="data.armor" value="{{hldata.armor}}">
+                <input id="{{hl.id}}_armor" class="attribute-value hitlocation-armor" type="number" name="data.armor" value="{{hldata.armor}}">
             </td>
             <td>
-                <input id="{{hl.id}}_wounds" class="hitlocation-wounds" type="text" name="data.wounds" value="{{hldata.wounds}}">
+                <input id="{{hl.id}}_wounds" class="hitlocation-wounds" type="number" name="data.wounds" value="{{hldata.wounds}}">
             </td>
             <td class="item-controls">
                 <a class="item-control item-edit" title="Edit Item">

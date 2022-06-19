@@ -1,7 +1,7 @@
 import { RQG } from '../config.js';
 import { RQGTools } from '../tools/rqgtools.js';
 import { skillMenuOptionsHH } from '../menu/skill-context-hh.js';
-import { attackMenuOptions } from '../menu/attack-context.js';
+import { attackMenuOptionsHH } from '../menu/attack-context-hh.js';
 import ActiveEffectRunequest from '../active-effect.js';
 import { RunequestBaseActorSheet } from './rqg-baseactor-sheet.js';
 
@@ -19,7 +19,7 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
       template: 'systems/runequest/templates/actor/hh/hh-actor-sheet.html',
       width: 1000,
       height: 700,
-      dragDrop: [{ dragSelector: '.item', dropSelector: null }],
+      dragDrop: [{ dragSelector: null, dropSelector: null }],
       tabs: [
         {
           navSelector: '.sheet-tabs',
@@ -125,7 +125,7 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
 
     // roll attacks (with right-click context menu)
     html.find('.attack-roll').click(e => this._onAttackRoll(e));
-    new ContextMenu(html, '.attack-roll', attackMenuOptions(this.actor));
+    new ContextMenu(html, '.attack-roll', attackMenuOptionsHH(this.actor));
 
     // handle dragging and dropping of items
     html.find('.item').on('dragstart', e => RQGTools._onDragItem(e, this.actor));
@@ -624,29 +624,34 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
       }
     }
     if (target?.classList?.contains('hitlocation-wounds')) {
-      const hitLocation = RQGTools.findItemId(event);
+      const hitLocation = this.actor.items.get(RQGTools.findItemId(event));
+      const value = Number(target.value) ? parseInt(target.value) : 0;
+      await hitLocation?.update({ [target.name]: value });
+    }
+    if (target?.classList?.contains('hitlocation-armor')) {
+      const hitLocation = this.actor.items.get(RQGTools.findItemId(event));
       const value = Number(target.value) ? parseInt(target.value) : 0;
       await hitLocation?.update({ [target.name]: value });
     }
     if (target?.classList?.contains('mpstorage-current')) {
-      const mpStorage = RQGTools.findItemId(event);
+      const mpStorage = this.actor.items.get(RQGTools.findItemId(event));
       const value = Number(target.value) ? parseInt(target.value) : 0;
       await mpStorage?.update({ [target.name]: value });
     }
     if (target?.classList?.contains('mpstorage-equiped')) {
-      const mpStorage = RQGTools.findItemId(event);
+      const mpStorage = this.actor.items.get(RQGTools.findItemId(event));
       await mpStorage?.update({ [target.name]: target.checked });
     }
     if (target?.classList?.contains('skill-experience')) {
-      const skill = RQGTools.findItemId(event);
+      const skill = this.actor.items.get(RQGTools.findItemId(event));
       await skill?.update({ [target.name]: target.checked });
     }
     if (target?.classList?.contains('passion-experience')) {
-      const passion = RQGTools.findItemId(event);
+      const passion = this.actor.items.get(RQGTools.findItemId(event));
       await passion?.update({ [target.name]: target.checked });
     }
     // if (target?.classList?.contains('attacks')) {
-    //   const attack = RQGTools.findItemId(event);
+    //   const attack = this.actor.items.get(RQGTools.findItemId(event));
     //   if (attack) {
     //     let value = null;
     //     if (target.dataset.dtype === 'Number') {
@@ -672,7 +677,7 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     //   }
     // }
     if (target?.classList?.contains('attacks-db')) {
-      const attack = RQGTools.findItemId(event);
+      const attack = this.actor.items.get(RQGTools.findItemId(event));
       await attack?.update({ [target.name]: target.checked });
     }
     return this.object.update(formData);

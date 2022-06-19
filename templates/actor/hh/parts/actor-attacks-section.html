@@ -5,16 +5,16 @@
     </td>
     <td>
         {{#if ../data.flags.sumskillcatmodifier}}
-        <input class="attribute-display" type="text" value="{{addCatModifierToSkill @root.data.skillcategory ../attackSkillCategory attack.data.data.attacktotal}}" disabled>
+        <input class="attribute-display" type="number" value="{{addCatModifierToSkill @root.data.skillcategory ../attackSkillCategory attack.data.data.attacktotal}}" disabled>
         {{else}}
-        <input class="attribute-display" type="text" value="{{attack.data.data.attacktotal}}" disabled>
+        <input class="attribute-display" type="number" value="{{attack.data.data.attacktotal}}" disabled>
         {{/if}}
     </td>
     <td>
         <input class="attribute-display" type="text" value="{{attack.data.data.damage}}" disabled>
     </td>
     <td>
-        <input class="attribute-display" type="text" value="{{attack.data.data.sr}}" disabled>
+        <input class="attribute-display" type="number" value="{{attack.data.data.sr}}" disabled>
     </td>
     <td>
         <input class="attribute-display" type="text" value="{{attack.data.data.hpcurrent}} / {{attack.data.data.hpmax}}" disabled>

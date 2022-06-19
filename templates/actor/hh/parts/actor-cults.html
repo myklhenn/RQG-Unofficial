@@ -2,8 +2,8 @@
     <thead>
         <tr>
             <th>{{localize "RQG.Cults"}} & {{localize "RQG.Runepoints"}}</th>
-            <th></th>
-            <th></th>
+            {{!-- <th></th> --}}
+            {{!-- <th></th> --}}
             <th></th>
             <th>
                 <a class="item-control item-create" title="Add a cult" data-type="cult">
@@ -17,8 +17,8 @@
         {{#each data.cults as |cult id|}}
         <tr class="item cult-row" data-item-id="{{cult.id}}" data-cultname="{{cult.name}}">
             <td>{{cult.name}}</td>
-            <td>{{cult.data.rank}}</td>
-            <td>{{cult.data.subcult}}</td>
+            {{!-- <td>{{cult.data.rank}}</td> --}}
+            {{!-- <td>{{cult.data.subcult}}</td> --}}
             <td>
                 <input class="attribute-display" type="text" value="{{cult.data.data.currentrunepoint}} / {{cult.data.data.maxrunepoint}}" disabled>
             </td>
