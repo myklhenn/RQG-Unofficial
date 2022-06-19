@@ -1,40 +1,42 @@
-import { RQG } from "../config.js";
-import { RQGTools } from "../tools/rqgtools.js";
-import { skillMenuOptions } from "../menu/skill-context.js";
-import { attackMenuOptions } from "../menu/attack-context.js";
-import ActiveEffectRunequest from "../active-effect.js";
-import { RunequestBaseActorSheet } from "./rqg-baseactor-sheet.js";
+import { RQG } from '../config.js';
+import { RQGTools } from '../tools/rqgtools.js';
+import { skillMenuOptionsHH } from '../menu/skill-context-hh.js';
+import { attackMenuOptions } from '../menu/attack-context.js';
+import ActiveEffectRunequest from '../active-effect.js';
+import { RunequestBaseActorSheet } from './rqg-baseactor-sheet.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
 export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet {
-  /** @override */
+  /**
+   * @override
+   */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["sheet", "actor", "rqghh"],
-      template:
-        "systems/runequest/templates/actor/hh/hh-actor-sheet.html",
-      width: 1200,
-      height: 1000,
-      dragDrop: [{ dragSelector: ".item", dropSelector: null }],
+      classes: ['sheet', 'actor', 'rqghh'],
+      template: 'systems/runequest/templates/actor/hh/hh-actor-sheet.html',
+      width: 1000,
+      height: 700,
+      dragDrop: [{ dragSelector: '.item', dropSelector: null }],
       tabs: [
         {
-          navSelector: ".sheet-tabs",
-          contentSelector: ".sheet-body",
-          initial: "summary",
-        },
+          navSelector: '.sheet-tabs',
+          contentSelector: '.sheet-body',
+          initial: 'summary',
+        }
       ],
     });
   }
 
   static confirmItemDelete(actor, itemId) {
-    actor.deleteEmbeddedDocuments("Item", [itemId]);
+    actor.deleteEmbeddedDocuments('Item', [itemId]);
   }
 
   /**
-   * @returns the data structure from the base sheet
+   * @override
+   * @returns The data structure from the base sheet
    */
   getData() {
     const context = super.getData();
@@ -44,9 +46,7 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
 
   /**
    * Organize and classify Items for Character sheets.
-   *
    * @param {Object} context The actor to prepare.
-   *
    * @return {undefined}
    */
 
@@ -54,18 +54,14 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
 
   /**
    * Organize and classify Items for Character sheets.
-   *
    * @param {Object} context The actor to prepare.
-   *
    * @return {undefined}
    */
   _prepareItems(context) {}
 
   /**
-   *
-   *
    * @override
-   *
+   * Setup callbacks for events fired when interacting with actor sheet
    * @param {Object} html DOM object to select parts of and add listeners to
    */
   activateListeners(html) {
@@ -75,85 +71,72 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     if (!this.options.editable) return;
 
     // (un)lock character sheet
-    html.find(".unlock-character-sheet").click(() => this._onFlagToggle("locked"));
+    html.find('.unlock-character-sheet').click(() => this._onFlagToggle('locked'));
 
     // roll characteristics
-    html.find(".characteristic-roll").click(e => this._onCharacteristicRoll(e));
+    html.find('.characteristic-roll').click(e => this._onCharacteristicRoll(e));
 
     // roll elemental runes
-    html.find(".elemental-rune-roll").click(e => this._onElementalRuneRoll(e));
+    html.find('.elemental-rune-roll').click(e => this._onElementalRuneRoll(e));
 
     // roll power runes
-    html.find(".power-rune-roll").click(e => this._onPowerRuneRoll(e));
+    html.find('.power-rune-roll').click(e => this._onPowerRuneRoll(e));
 
-    // roll passions
-    html.find(".passion-roll").click(e => this._onPassionRoll(e));
-    // context menu for passions
-    new ContextMenu(
-      html,
-      ".passion-roll",
-      skillMenuOptions(this.actor, this.token)
-    );
+    // roll passions (with right-click context menu)
+    html.find('.passion-roll').click(e => this._onPassionRoll(e));
+    new ContextMenu(html, '.passion-roll', skillMenuOptionsHH(this.actor));
 
     // add inventory item
-    html.find(".item-create").click(this._onItemCreate.bind(this));
+    html.find('.item-create').click(this._onItemCreate.bind(this));
 
     // update inventory item
-    html.find(".item-edit").click(e => {
-      const itemId = e.currentTarget.closest(".item").dataset["itemId"];
-      const item = this.actor.getEmbeddedDocument("Item", itemId);
+    html.find('.item-edit').click(e => {
+      const itemId = RQGTools.findItemId(e);
+      const item = this.actor.getEmbeddedDocument('Item', itemId);
       item.sheet.render(true);
     });
 
     // delete inventory item
-    html.find(".item-delete").click(e => {
-      const li = e.currentTarget.closest(".item");
-      this.actor.deleteEmbeddedDocuments("Item", [li.data("itemId")]);
-      li.slideUp(200, () => this.render(false));
+    html.find('.item-delete').click(e => {
+      const itemId = RQGTools.findItemId(e);
+      this.actor.deleteEmbeddedDocuments('Item', [itemId]);
+      // const item = e.currentTarget.closest('.item');
+      // this.actor.deleteEmbeddedDocuments('Item', [item.dataset['itemId']]);
+      // item.slideUp(200, () => this.render(false));
     });
 
     // toggle inclusion of skill category modifier in skill total column
-    html.find(".toggle-sum-skill-cat-modifier").click(
-      () => this._onFlagToggle("sumskillcatmodifier")
+    html.find('.toggle-sum-skill-cat-modifier').click(
+      () => this._onFlagToggle('sumskillcatmodifier')
     );
 
-    // roll skills
-    html.find(".skill-roll").click(e => this._onSkillRoll(e));
-    // context menu for skills
-    new ContextMenu(
-      html,
-      ".skill-roll",
-      skillMenuOptions(this.actor, this.token)
-    );
+    // roll skills (with right-click context menu)
+    html.find('.skill-roll').click(e => this._onSkillRoll(e));
+    new ContextMenu(html, '.skill-roll', skillMenuOptionsHH(this.actor));
 
     // roll rune spells
-    html.find(".rune-spell-roll").click(e => this._onRuneSpellRoll(e));
+    html.find('.rune-spell-roll').click(e => this._onRuneSpellRoll(e));
 
     // roll spirit spells
-    html.find(".spirit-spell-roll").click(e => this._onSpiritSpellRoll(e));
+    html.find('.spirit-spell-roll').click(e => this._onSpiritSpellRoll(e));
 
     // handle toggling of spell effects
-    html.find(".spell-toggle").click(this._onSpellToggle.bind(this));
+    html.find('.spell-toggle').click(this._onSpellToggle.bind(this));
 
-    // roll attacks
-    html.find(".attack-roll").click(e => this._onAttackRoll(e));
-    // context menu for attacks
-    new ContextMenu(
-      html,
-      ".attack-roll",
-      attackMenuOptions(this.actor, this.token)
-    );
+    // roll attacks (with right-click context menu)
+    html.find('.attack-roll').click(e => this._onAttackRoll(e));
+    new ContextMenu(html, '.attack-roll', attackMenuOptions(this.actor));
 
     // handle dragging and dropping of items
-    html.find(".item").on("dragstart", e => RQGTools._onDragItem(e, this.actor));
+    html.find('.item').on('dragstart', e => RQGTools._onDragItem(e, this.actor));
 
-    html.find(".effect-control").click(e =>
+    html.find('.effect-control').click(e =>
       ActiveEffectRunequest.onManageActiveEffect(e, this.actor)
     );
 
     if (game.user.isGM) {
       // enable UI functionality only available to GM users
-      html.find(".export-items").click(this._onExportItems.bind(this));
+      html.find('.export-items').click(this._onExportItems.bind(this));
     }
   }
 
@@ -162,47 +145,43 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
   }
 
   /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
+   * Creating a new Owned Item for the actor using initial data defined in the
+   * HTML dataset
+   * @param {Event} event The originating click event
    * @private
    */
   _onItemCreate(event) {
     event.preventDefault();
-    const header = event.currentTarget;
-    // Get the type of item to create.
-    const type = header.dataset.type;
-    // Grab any data associated with this control.
-    const data = duplicate(header.dataset);
-    // Initialize a default name.
-    const name = `New ${type.capitalize()}`;
-    // Prepare the item object.
+    const eventData = event.currentTarget.dataset;
     const itemData = {
-      name: name,
-      type: type,
-      data: data,
+      name: `New ${eventData.type.capitalize()}`, // an initial default name
+      type: eventData.type,
+      data: duplicate(eventData),
     };
-    // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.data["type"];
-
-    // Finally, create the item!
-    return this.actor.createEmbeddedDocuments("Item", [itemData]);
+    delete itemData.data['type']; // remove since it was copied to itemData.type
+    return this.actor.createEmbeddedDocuments('Item', [itemData]);
   }
 
-  _onCharacteristicRoll(e) {
-    e.preventDefault();
-    const charId = e.target.closest(".characteristic-item").dataset["characteristic"];
+  /**
+   * Perform a characteristic roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onCharacteristicRoll(event) {
+    event.preventDefault();
+    const charId = RQGTools.findItemId(event, '.characteristic-item', 'characteristic');
     const charData = this.getData().data.characteristics[charId];
-    renderTemplate("/systems/runequest/templates/chat/char-dialog.html", {
+    renderTemplate('/systems/runequest/templates/chat/char-dialog.html', {
       // pre-filled dialog data
       charname: game.i18n.localize(charData.label),
       charvalue: charData.value,
       difficultymultiplier: 5,
     }).then(dialogContent => new Dialog({
-      title: "Passion Roll",
+      title: 'Passion Roll',
       content: dialogContent,
       buttons: {
         rollButton: {
-          label: game.i18n.localize("Roll"),
+          label: game.i18n.localize('Roll'),
           callback: html => {
             // note that this does not execute until DiceWFRP.prepareTest() has
             // finished and the user confirms the dialog
@@ -215,33 +194,48 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
           }
         }
       },
-      default: "rollButton"
+      default: 'rollButton'
     }).render(true));
   }
 
-  _onElementalRuneRoll(e) {
-    e.preventDefault();
-    const runeId = e.target.closest(".rune-item").dataset["rune"];
+  /**
+   * Perform an elemental rune roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onElementalRuneRoll(event) {
+    event.preventDefault();
+    const runeId = RQGTools.findItemId(event, '.rune-item', 'rune');
     const runeData = this.getData().data.elementalrunes[runeId];
     const runeName = game.i18n.localize(runeData.label);
     const rollTarget = runeData.value;
     this.basicRoll(runeName, rollTarget);
   }
 
-  _onPowerRuneRoll(e) {
-    e.preventDefault();
-    const runePairId = e.target.closest(".power-rune-pair").dataset["runePair"];
-    const runeId = e.target.closest(".rune-item").dataset["rune"];
+  /**
+   * Perform a power rune roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onPowerRuneRoll(event) {
+    event.preventDefault();
+    const runePairId = RQGTools.findItemId(event, '.power-rune-pair', 'runePair');
+    const runeId = RQGTools.findItemId(event, '.rune-item', 'rune');
     const runeData = this.getData().data.powerrunes[runePairId][runeId];
     const runeName = game.i18n.localize(runeData.label);
     const rollTarget = runeData.value;
     this.basicRoll(runeName, rollTarget);
   }
 
-  _onPassionRoll(e) {
-    e.preventDefault();
-    const passionId = e.target.closest(".item").dataset["itemId"];
-    const passion = this.actor.getEmbeddedDocument("Item", passionId);
+  /**
+   * Perform a passion roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onPassionRoll(event) {
+    event.preventDefault();
+    const passionId = RQGTools.findItemId(event);
+    const passion = this.actor.getEmbeddedDocument('Item', passionId);
     const passionName = passion.data.name;
     const rollTarget = passion.data.data.total;
     this.basicRoll(passionName, rollTarget);
@@ -250,21 +244,21 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     //   if (event.ctrlKey == true) {
     //     // perform gain roll
     //     const passionid = event.currentTarget.dataset.itemId;
-    //     let passion = this.actor.getEmbeddedDocument("Item", passionid);
+    //     let passion = this.actor.getEmbeddedDocument('Item', passionid);
     //     passion.gainroll();
     //     return;
     //   }
     // } else if (event.button == 2) {
     //   if (event.altKey == true) {
     //     // delete item
-    //     this.actor.deleteEmbeddedDocuments("Item", [
+    //     this.actor.deleteEmbeddedDocuments('Item', [
     //       event.currentTarget.dataset.itemid,
     //     ]);
     //     return;
     //   }
     //   // edit item
     //   const item = this.actor.getEmbeddedDocument(
-    //     "Item",
+    //     'Item',
     //     event.currentTarget.dataset.itemid
     //   );
     //   item.sheet.render(true);
@@ -282,14 +276,14 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     // }
     // const row = event.target.parentElement.parentElement;
     // //(row);
-    // let passionname = row.dataset["passionname"];
-    // const passionid = row.dataset["itemId"];
-    // //("passionname:"+passionname+" - passionid:"+passionid);
-    // const passion = this.actor.getEmbeddedDocument("Item", passionid);
+    // let passionname = row.dataset['passionname'];
+    // const passionid = row.dataset['itemId'];
+    // //('passionname:'+passionname+' - passionid:'+passionid);
+    // const passion = this.actor.getEmbeddedDocument('Item', passionid);
     // //(passion);
     // let dialogOptions = {
-    //   title: "Passion Roll",
-    //   template: "/systems/runequest/templates/chat/skill-dialog.html",
+    //   title: 'Passion Roll',
+    //   template: '/systems/runequest/templates/chat/skill-dialog.html',
     //   "z-index": 100,
     //   // Prefilled dialog data
 
@@ -315,25 +309,29 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     //     content: dlg,
     //     buttons: {
     //       rollButton: {
-    //         label: game.i18n.localize("Roll"),
+    //         label: game.i18n.localize('Roll'),
     //         callback: (html) => dialogOptions.callback(html),
     //       },
     //     },
-    //     default: "rollButton",
+    //     default: 'rollButton',
     //   }).render(true);
     // });
   }
 
-  _onSkillRoll(e) {
-    e.preventDefault();
-    const skillId = e.currentTarget.closest(".item").dataset["itemId"];
-    const skill = this.actor.getEmbeddedDocument("Item", skillId);
+  /**
+   * Perform a skill roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onSkillRoll(event) {
+    event.preventDefault();
+    const skillId = RQGTools.findItemId(event);
+    const skill = this.actor.getEmbeddedDocument('Item', skillId);
     skill.roll();
 
     // if (e.button == 0) {
     //   if (e.ctrlKey == true) {
-    //     const skillid = e.currentTarget.dataset.itemid;
-    //     let skill = this.actor.getEmbeddedDocument("Item", skillid);
+    //     let skill = this.actor.getEmbeddedDocument('Item', skillId);
     //     //(skill)
     //     skill.gainroll();
     //     return;
@@ -342,10 +340,10 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     //   /*
     //   else if(e.button == 2) {
     //     if(e.altKey == true){
-    //       this.actor.deleteEmbeddedDocuments("Item",[e.currentTarget.dataset.itemid]);
+    //       this.actor.deleteEmbeddedDocuments('Item',[skillId]);
     //       return;
     //     }
-    //     const item = this.actor.getEmbeddedDocument("Item",e.currentTarget.dataset.itemid);
+    //     const item = this.actor.getEmbeddedDocument('Item',skillId);
     //     item.sheet.render(true);
     //     return;
     //   }
@@ -354,34 +352,39 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     // }
   }
 
-  _onRuneSpellRoll(e) {
-    e.preventDefault();
+  /**
+   * Perform a rune spell roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onRuneSpellRoll(event) {
+    event.preventDefault();
     const actorData = this.getData().data;
-    const runeSpellId = e.target.closest(".item").dataset["itemId"];
-    const runeSpell = this.actor.getEmbeddedDocument("Item", runeSpellId);
-    renderTemplate("/systems/runequest/templates/chat/runespell-dialog.html", {
+    const runeSpellId = RQGTools.findItemId(event);
+    const runeSpell = this.actor.getEmbeddedDocument('Item', runeSpellId);
+    renderTemplate('/systems/runequest/templates/chat/runespell-dialog.html', {
       // pre-filled dialog data
       runespell: runeSpell,
       spellname: runeSpell.name,
       data: actorData,
       config: RQG,
     }).then(dialogContent => new Dialog({
-      title: "Runespell Casting",
+      title: 'Runespell Casting',
       content: dialogContent,
       buttons: {
         rollButton: {
-          label: game.i18n.localize("RQG.Roll"),
+          label: game.i18n.localize('RQG.Roll'),
           callback: html => {
             // note that this does not execute until DiceWFRP.prepareTest() has
             // finished and the user confirms the dialog
             const spellName = html.find('[name="spellname"]').val();
             const runeUsed = html.find('[name="runeused"]').val();
-            const rollTarget = this._findRune(actorData, runeUsed).value;
+            const rollTarget = this._findRuneData(actorData, runeUsed).value;
             this.basicRoll(spellName, rollTarget);
           }
         }
       },
-      default: "rollButton"
+      default: 'rollButton'
     }).render(true));
 
     // if (e.button == 0) {
@@ -390,39 +393,56 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     // }
     // /*
     //   const row= e.target.parentElement.parentElement;
-    //   const runename = row.dataset["rune"];
+    //   const runename = row.dataset['rune'];
     //   //(runename);
-    //   const spellname = row.dataset["spellname"]+" ("+runename+")";
+    //   const spellname = `${row.dataset['spellname']} (${runename})`;
     //   const rune = this._findrune(data,runename);
     //   const target = rune.value;
     // */
   }
 
-  _onSpiritSpellRoll(e) {
-    e.preventDefault();
-    const spellId = e.currentTarget.closest(".item").dataset["itemId"];
-    const spell = this.actor.getEmbeddedDocument("Item", spellId);
+  /**
+   * Perform a spirit spell roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onSpiritSpellRoll(event) {
+    event.preventDefault();
+    const spellId = RQGTools.findItemId(event);
+    const spell = this.actor.getEmbeddedDocument('Item', spellId);
     spell.roll();
   }
 
-  _findRune(actorData, runeName) {
-    if (typeof actorData.elementalrunes[runeName] != "undefined") {
+  /**
+   * Find rune data in the actor's data structure
+   * @param actorData A copy of the actor sheet's data structure
+   * @param {String} runeName The rune to be found in the actor data
+   * @returns Rune data corresponding to `runeName`
+   * @private
+   */
+  _findRuneData(actorData, runeName) {
+    if (typeof actorData.elementalrunes[runeName] != 'undefined') {
       return actorData.elementalrunes[runeName];
     } else {
       for (let runePair in actorData.powerrunes) {
-        if (typeof actorData.powerrunes[runePair][runeName] != "undefined") {
+        if (typeof actorData.powerrunes[runePair][runeName] != 'undefined') {
           return actorData.powerrunes[runePair][runeName];
         }
       }
-      return actorData.elementalrunes["air"];
+      return actorData.elementalrunes['air'];
     }
   }
 
-  _onAttackRoll(e) {
-    e.preventDefault();
+  /**
+   * Perform an attack roll
+   * @param {Event} event The originating click event
+   * @private
+   */
+  _onAttackRoll(event) {
+    event.preventDefault();
     const actorData = this.getData().data;
     const targetDefense = 0;
-    const attackId = e.currentTarget.closest(".item").dataset["itemId"];
+    const attackId = RQGTools.findItemId(event);
 
     if (game.user.targets.size > 0) {
       const targets = Array.from(game.user.targets);
@@ -432,17 +452,17 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     }
 
     if (!attackId) {
-      renderTemplate("/systems/runequest/templates/chat/attack-dialog.html", {
+      renderTemplate('/systems/runequest/templates/chat/attack-dialog.html', {
         // pre-filled dialog data
         attacks: actorData.attacks,
         data: actorData,
         targetdefense: targetDefense,
       }).then(dialogContent => new Dialog({
-        title: "Attack Roll",
+        title: 'Attack Roll',
         content: dialogContent,
         buttons: {
           rollButton: {
-            label: game.i18n.localize("RQG.Roll"),
+            label: game.i18n.localize('RQG.Roll'),
             callback: html => {
               // note that this does not execute until DiceWFRP.prepareTest()
               // has finished and the user confirms the dialog
@@ -454,21 +474,27 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
             }
           }
         },
-        default: "rollButton"
+        default: 'rollButton'
       }).render(true));
     } else {
-      const attack = this.actor.getEmbeddedDocument("Item", attackId);
+      const attack = this.actor.getEmbeddedDocument('Item', attackId);
       attack.roll({ targetdefense: targetDefense });
     }
   }
 
+  /**
+   * Perform a basic roll against a target success value
+   * @param {String} charName Actor name to display in chat message
+   * @param {Number} rollTarget Number to roll below
+   * @returns {String} Success result
+   */
   async basicRoll(charName, rollTarget) {
     // perform roll
-    const roll = await new Roll("1d100").roll();
+    const roll = await new Roll('1d100').roll();
     const result = this._getRollResult(roll.total, rollTarget);
 
     // render the chat card template
-    const template = "systems/runequest/templates/chat/skill-card.html";
+    const template = 'systems/runequest/templates/chat/skill-card.html';
     const html = await renderTemplate(template, {
       actor: this.actor,
       item: this.object.data,
@@ -480,9 +506,9 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
 
     // "whisper" blind rolls to GM
     let chatWhisper = null;
-    const rollMode = game.settings.get("core", "rollMode");
-    if (["gmroll", "blindroll"].includes(rollMode)) {
-      chatWhisper = ChatMessage.getWhisperRecipients("GM");
+    const rollMode = game.settings.get('core', 'rollMode');
+    if (['gmroll', 'blindroll'].includes(rollMode)) {
+      chatWhisper = ChatMessage.getWhisperRecipients('GM');
     }
 
     // send rendered chat card to chat log
@@ -495,125 +521,142 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
         alias: this.actor.name,
       },
       whisper: chatWhisper,
-      blind: (rollMode === "blindroll")
-    });
-
-    return result;
-  }
-
-  async gainRoll(charName, rollTarget) {
-    // perform roll
-    const roll = await new Roll("1d100").roll();
-    const result = this._getRollResult(roll.total, rollTarget);
-
-    // render the chat card template
-    const template = "systems/runequest/templates/chat/skill-card.html";
-    const html = await renderTemplate(template, {
-      actor: this.actor,
-      item: this.object.data,
-      charname: charName,
-      target: rollTarget,
-      roll: roll,
-      result: result,
-    });
-
-    // "whisper" blind rolls to GM
-    let chatWhisper = null;
-    const rollMode = game.settings.get("core", "rollMode");
-    if (["gmroll", "blindroll"].includes(rollMode)) {
-      chatWhisper = ChatMessage.getWhisperRecipients("GM");
-    }
-
-    // send rendered chat card to chat log
-    ChatMessage.create({
-      user: game.user.id,
-      content: html,
-      speaker: {
-        actor: this.actor.id,
-        token: this.actor.token,
-        alias: this.actor.name,
-      },
-      whisper: chatWhisper,
-      blind: (rollMode === "blindroll")
+      blind: (rollMode === 'blindroll')
     });
 
     return result;
   }
 
   /**
-   * Handle rolling of an item from the Actor sheet, obtaining the Item instance and dispatching to it's roll method
+   * Perform a gain roll against a target success value
+   * @param {String} charName Actor name to display in chat message
+   * @param {Number} rollTarget Number to roll above
+   * @returns {String} Success result
+   */
+  async gainRoll(charName, rollTarget) {
+    // perform roll
+    const roll = await new Roll('1d100').roll();
+    const result = this._getRollResult(roll.total, rollTarget);
+
+    // render the chat card template
+    const template = 'systems/runequest/templates/chat/skill-card.html';
+    const html = await renderTemplate(template, {
+      actor: this.actor,
+      item: this.object.data,
+      charname: charName,
+      target: rollTarget,
+      roll: roll,
+      result: result,
+    });
+
+    // "whisper" blind rolls to GM
+    let chatWhisper = null;
+    const rollMode = game.settings.get('core', 'rollMode');
+    if (['gmroll', 'blindroll'].includes(rollMode)) {
+      chatWhisper = ChatMessage.getWhisperRecipients('GM');
+    }
+
+    // send rendered chat card to chat log
+    ChatMessage.create({
+      user: game.user.id,
+      content: html,
+      speaker: {
+        actor: this.actor.id,
+        token: this.actor.token,
+        alias: this.actor.name,
+      },
+      whisper: chatWhisper,
+      blind: (rollMode === 'blindroll')
+    });
+
+    return result;
+  }
+
+  /**
+   * Handle rolling of an item from the Actor sheet, obtaining the Item
+   * instance and dispatching to it's roll method
+   * @param {Event} event The originating click event
    * @private
    */
-  _onItemRoll(e) {
-    e.preventDefault();
-    const itemId = e.currentTarget.closest(".item").dataset["itemId"];
-    const item = this.actor.getEmbeddedDocument("Item", itemId);
+  _onItemRoll(event) {
+    event.preventDefault();
+    const itemId = RQGTools.findItemId(event);
+    const item = this.actor.getEmbeddedDocument('Item', itemId);
     return item.roll();
   }
 
-  async genericAttackRoll(attack) {
-    const data = this.getData();
-    const categoryId = attack.data.data.attacktype + "weapons";
-    const skillName = game.i18n.localize(
-      RQG.weaponskills[attack.data.data.skillused]
-    );
-    const damageBonus = attack.options.actor.data.data.attributes.damagebonus;
-    const skillUsed = data.actor.skills[categoryId].find(skill => skill.name == skillName);
-    const categoryModifier =
-      attack.options.actor.data.data.skillcategory[categoryId].modifier;
-    const rollTarget = skillUsed.data.total + categoryModifier;
+  // async genericAttackRoll(attack) {
+  //   const data = this.getData();
+  //   const categoryId = attack.data.data.attacktype + 'weapons';
+  //   const skillName = game.i18n.localize(
+  //     RQG.weaponskills[attack.data.data.skillused]
+  //   );
+  //   const damageBonus = attack.options.actor.data.data.attributes.damagebonus;
+  //   const skillUsed = data.actor.skills[categoryId].find(skill => skill.name == skillName);
+  //   const categoryModifier =
+  //     attack.options.actor.data.data.skillcategory[categoryId].modifier;
+  //   const rollTarget = skillUsed.data.total + categoryModifier;
 
-    const roll = await new Roll("1d100").roll();
-    const result = this._getRollResult(roll.total, rollTarget);
+  //   const roll = await new Roll('1d100').roll();
+  //   const result = this._getRollResult(roll.total, rollTarget);
 
-    this.htmldamageroll(roll, rollTarget, result, attack, damageBonus);
-  }
+  //   this.htmldamageroll(roll, rollTarget, result, attack, damageBonus);
+  // }
 
-  async _updateObject(e, formData) {
-    const target = e?.currentTarget;
-    if (target?.classList?.contains("power-rune-input")) {
+  /**
+   * Update the actor data structure with values from the provided
+   * `formData` object
+   * @param {Event} event The event that triggered the form update/submission
+   * @param formData Data structure containing form data from the actor sheet
+   * @returns The `update` callback attached to this class instance
+   */
+  async _updateObject(event, formData) {
+    const target = event?.currentTarget;
+    if (target?.classList?.contains('power-rune-input')) {
       if (Number(target.value)) {
-        const runePairId = target.closest(".power-rune-pair").dataset["runePair"];
-        const runeId = target.closest(".rune-item").dataset["rune"];
+        const runePairId = RQGTools.findItemId(event, '.power-rune-pair', 'runePair');
+        const runeId = RQGTools.findItemId(event, '.rune-item', 'rune');
         const otherRuneId = this._getOtherRuneInPair(runePairId, runeId);
-        const formDataId = `data.powerrunes.${runePairId}.${otherRuneId}.value`;
-        formData[formDataId] = 100 - parseInt(target.value);
+        if (otherRuneId) {
+          const formDataId = `data.powerrunes.${runePairId}.${otherRuneId}.value`;
+          formData[formDataId] = 100 - parseInt(target.value);
+        }
       }
     }
-    if (target?.classList?.contains("hitlocation-wounds")) {
-      const hitLocation = this._getActorItemViaTarget(target);
+    if (target?.classList?.contains('hitlocation-wounds')) {
+      const hitLocation = RQGTools.findItemId(event);
       const value = Number(target.value) ? parseInt(target.value) : 0;
       await hitLocation?.update({ [target.name]: value });
     }
-    if (target?.classList?.contains("mpstorage-current")) {
-      const mpStorage = this._getActorItemViaTarget(target);
+    if (target?.classList?.contains('mpstorage-current')) {
+      const mpStorage = RQGTools.findItemId(event);
       const value = Number(target.value) ? parseInt(target.value) : 0;
       await mpStorage?.update({ [target.name]: value });
     }
-    if (target?.classList?.contains("mpstorage-equiped")) {
-      const mpStorage = this._getActorItemViaTarget(target);
+    if (target?.classList?.contains('mpstorage-equiped')) {
+      const mpStorage = RQGTools.findItemId(event);
       await mpStorage?.update({ [target.name]: target.checked });
     }
-    if (target?.classList?.contains("skill-experience")) {
-      const skill = this._getActorItemViaTarget(target);
+    if (target?.classList?.contains('skill-experience')) {
+      const skill = RQGTools.findItemId(event);
       await skill?.update({ [target.name]: target.checked });
     }
-    if (target?.classList?.contains("passion-experience")) {
-      const passion = this._getActorItemViaTarget(target);
+    if (target?.classList?.contains('passion-experience')) {
+      const passion = RQGTools.findItemId(event);
       await passion?.update({ [target.name]: target.checked });
     }
-    // if (target?.classList?.contains("attacks")) {
-    //   const attack = this._getActorItemViaTarget(target);
+    // if (target?.classList?.contains('attacks')) {
+    //   const attack = RQGTools.findItemId(event);
     //   if (attack) {
     //     let value = null;
-    //     if (target.dataset.dtype === "Number") {
+    //     if (target.dataset.dtype === 'Number') {
     //       value = target.value
     //         ? parseInt(target.value)
     //         : null;
     //     } else {
     //       value = target.value;
     //     }
-    //     if (target.name !== "data.name") {
+    //     if (target.name !== 'data.name') {
     //       if (!target.value) {
     //         await attack.update({ [target.name]: null });
     //       } else {
@@ -621,15 +664,15 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     //       }
     //     } else {
     //       if (!target.value) {
-    //         await attack.update({ ["name"]: null });
+    //         await attack.update({ ['name']: null });
     //       } else {
-    //         await attack.update({ ["name"]: value });
+    //         await attack.update({ ['name']: value });
     //       }
     //     }
     //   }
     // }
-    if (target?.classList?.contains("attacks-db")) {
-      const attack = this._getActorItemViaTarget(target);
+    if (target?.classList?.contains('attacks-db')) {
+      const attack = RQGTools.findItemId(event);
       await attack?.update({ [target.name]: target.checked });
     }
     return this.object.update(formData);
@@ -637,7 +680,9 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
 
   _getOtherRuneInPair(runePair, rune) {
     const runePairFirstPart = runePair.substring(0, rune.length);
-    const runePairLastPart = runePair.substring(runePair.length - rune.length, runePair.length);
+    const runePairLastPart = runePair.substring(
+      runePair.length - rune.length, runePair.length
+    );
     if (runePairFirstPart == rune) {
       return runePair.substring(rune.length, runePair.length);
     } else if (runePairLastPart == rune) {
@@ -645,10 +690,6 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     } else {
       return null;
     }
-  }
-
-  _getActorItemViaTarget(target) {
-    return this.actor.items.get(target.closest(".item").dataset.itemId);
   }
 
   _getRollResult(roll, rollTarget) {
@@ -662,18 +703,18 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     if ((roll < 96 && roll <= rollTarget) || roll <= 5) {
       // success
       if (roll <= criticalThreshold) {
-        result = "critical";
+        result = 'critical';
       } else if (roll <= specialThreshold) {
-        result = "special";
+        result = 'special';
       } else {
-        result = "success";
+        result = 'success';
       }
     } else {
       // failure
       if (roll >= fumbleThreshold) {
-        result = "fumble";
+        result = 'fumble';
       } else {
-        result = "failure";
+        result = 'failure';
       }
     }
 
@@ -698,21 +739,18 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
   }
 
   async _onSpellToggle(event) {
-    const spellid = event.currentTarget.closest(".item").dataset.itemId;
+    const spellid = RQGTools.findItemId(event);
     const spell = this.actor.items.get(spellid);
     const effects = this.actor.effects;
-    const spelleffects = effects.filter((effect) =>
+    const spellEffects = effects.filter(effect =>
       effect.data.origin.endsWith(spellid)
     );
-    if (spelleffects.length == 0) {
-      //No effects found for this spell.
-      return;
+    if (spellEffects.length == 0) return; // no spell effects found
+    const spellStatus = !spell.data.data.active;
+    for (const effect of spellEffects) {
+      await effect.update({ disabled: !spellStatus });
     }
-    const spellstatus = !spell.data.data.active;
-    for (const effect of spelleffects) {
-      await effect.update({ disabled: !spellstatus });
-    }
-    return spell.update({ "data.active": spellstatus });
+    return spell.update({ 'data.active': spellStatus });
   }
 
   async _onExportItems(event) {
@@ -721,9 +759,9 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
 
     //First we create the compendium
     let timestamp = Date.now();
-    let label = this.actor.data.name + "-" + timestamp;
+    let label = `${this.actor.data.name}-${timestamp}`;
     const itemCompendium = await game.packs
-      .get("runequest.character-items-export")
+      .get('runequest.character-items-export')
       .duplicateCompendium({ label: label });
     console.log(itemCompendium);
     for (let i of this.actor.items) {
