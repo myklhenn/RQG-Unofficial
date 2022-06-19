@@ -98,12 +98,12 @@
 .rqghh .characteristic-row .characteristic-item label:hover nav {
   text-shadow: none;
 }
-.rqghh .characteristic-row .characteristic-item input[type=text] {
+.rqghh .characteristic-row .characteristic-item input[type=number] {
   text-align: center;
   height: 30px;
   width: 60px;
 }
-.rqghh .characteristic-row .characteristic-item input[type=text]:hover {
+.rqghh .characteristic-row .characteristic-item input[type=number]:hover {
   cursor: text;
   box-shadow: 0 0 4px #7a7971;
 }
@@ -162,13 +162,13 @@
   display: flex;
   align-items: center;
 }
-.rqghh .rune-item input[type=text] {
+.rqghh .rune-item input[type=number] {
   text-align: center;
   width: 100%;
   height: 30px;
   font-size: 16px;
 }
-.rqghh .rune-item input[type=text]:hover {
+.rqghh .rune-item input[type=number]:hover {
   cursor: text;
   box-shadow: 0 0 4px #7a7971;
 }
@@ -202,6 +202,18 @@
   box-shadow: 0 0 4px #7a7971;
 }
 .rqghh table.hh-table input[type=text].attribute-display {
+  border: none;
+}
+.rqghh table.hh-table input[type=number] {
+  width: 50px;
+  height: 22px;
+}
+.rqghh table.hh-table input[type=number]:enabled:hover {
+  cursor: text;
+  box-shadow: 0 0 4px #7a7971;
+}
+.rqghh table.hh-table input[type=number].attribute-display {
+  color: var(--main-text-color);
   border: none;
 }
 .rqghh table.hh-table input[type=checkbox]:hover {
@@ -239,11 +251,8 @@
 .rqghh .hitlocations-table {
   flex: 1 0 content;
 }
-.rqghh .hitlocations-table tr th,
-.rqghh .hitlocations-table tr td {
-  width: 120px;
-}
-.rqghh .hitlocations-table tr td input[type=text] {
+.rqghh .hitlocations-table tr td input[type=text],
+.rqghh .hitlocations-table tr td input[type=number] {
   width: 60px;
 }
 .rqghh .passions-table tr .passion-roll:hover {
@@ -253,7 +262,7 @@
 .rqghh .passions-table tr .passion-roll:hover nav {
   text-shadow: none;
 }
-.rqghh .passions-table tr td:first-child input[type=text] {
+.rqghh .passions-table tr td:first-child input[type=number] {
   text-align: center;
   margin-left: 0.75em;
 }
@@ -275,6 +284,15 @@
   padding-top: 2px;
   padding-bottom: 2px;
 }
+.rqghh .skills-section-table tr th i.fas.enabled-state {
+  color: var(--color-text-light-highlight);
+}
+.rqghh .skills-section-table tr th i.fas.disabled-state {
+  color: var(--color-text-light-primary);
+}
+.rqghh .skills-section-table tr th input[type=number].attribute-display {
+  color: var(--color-text-light-highlight);
+}
 .rqghh .skills-section-table tr td {
   padding-top: 0;
   padding-bottom: 0;
@@ -282,7 +300,7 @@
 .rqghh .skills-section-table tr td.skill-base-column {
   width: 50px;
 }
-.rqghh .skills-section-table tr td.skill-base-column input {
+.rqghh .skills-section-table tr td.skill-base-column input[type=number] {
   font-style: italic;
   color: rgba(25, 24, 19, 0.75);
 }
@@ -326,4 +344,7 @@
 }
 .rqghh .rune-spells-table tr input.attribute-display {
   width: 50px;
+}
+.rqghh .notes-page .editor {
+  height: 400px;
 }

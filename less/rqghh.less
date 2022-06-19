@@ -180,7 +180,7 @@
 				padding-right: 0.2em;
 			}
 
-			input[type=text] {
+			input[type=number] {
 				@input-hover-effect();
 				text-align: center;
 				height: 30px;
@@ -256,7 +256,7 @@
 			}
 		}
 
-		input[type=text] {
+		input[type=number] {
 			@input-hover-effect();
 			text-align: center;
 			width: 100%;
@@ -296,6 +296,18 @@
 				@input-hover-effect();
 			}
 			&.attribute-display {
+				border: none;
+			}
+		}
+
+		input[type=number] {
+			width: 50px;
+			height: 22px;
+			&:enabled {
+				@input-hover-effect();
+			}
+			&.attribute-display {
+				color: var(--main-text-color);
 				border: none;
 			}
 		}
@@ -343,11 +355,8 @@
 	.hitlocations-table {
 		flex: 1 0 content;
 
-		tr {
-			th, td {
-				width: 120px;
-			}
-			td input[type=text] {
+		tr td {
+			input[type=text], input[type=number] {
 				width: 60px;
 			}
 		}
@@ -358,7 +367,7 @@
 			.passion-roll {
 				@rollable-hover-effect();
 			}
-			td:first-child input[type=text] {
+			td:first-child input[type=number] {
 				text-align: center;
 				margin-left: 0.75em;
 			}
@@ -392,6 +401,17 @@
 			th {
 				padding-top: 2px;
 				padding-bottom: 2px;
+				i.fas {
+					&.enabled-state {
+						color: var(--color-text-light-highlight);
+					}
+					&.disabled-state {
+						color: var(--color-text-light-primary);
+					}
+				}
+				input[type=number].attribute-display {
+					color: var(--color-text-light-highlight);
+				}
 			}
 			td {
 				padding-top: 0;
@@ -400,7 +420,7 @@
 
 			td.skill-base-column {
 				width: 50px;
-				input {
+				input[type=number] {
 					font-style: italic;
 					color: rgba(25, 24, 19, 0.75);
 				}
@@ -461,6 +481,12 @@
 			input.attribute-display {
 				width: 50px;
 			}
+		}
+	}
+
+	.notes-page {
+		.editor {
+			height: 400px;
 		}
 	}
 }

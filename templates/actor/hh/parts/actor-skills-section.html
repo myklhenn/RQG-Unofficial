@@ -5,14 +5,14 @@
             <th>
                 <a class="toggle-sum-skill-cat-modifier" title="Toggle inclusion of skill category modifier in skill total column">
                     {{#if data.flags.sumskillcatmodifier}}
-                    <i class="fas fa-calculator" style="color: var(--color-text-light-highlight)"></i>
+                    <i class="fas fa-calculator enabled-state"></i>
                     {{else}}
-                    <i class="fas fa-calculator" style="color: var(--color-text-light-primary)"></i>
+                    <i class="fas fa-calculator disabled-state"></i>
                     {{/if}}
                 </a>
             </th>
             <th>
-                <input class="attribute-display" type="text" value="{{skillcategorymodifier @root.data.skillcategory skillCat}}" disabled>
+                <input class="attribute-display" type="number" value="{{skillcategorymodifier @root.data.skillcategory skillCat}}" disabled>
             </th>
             <th>
                 <a class="item-control item-create" title="Create item" data-type="skill" data-skillcategory="{{skillCat}}">
@@ -30,13 +30,13 @@
                 </span>
             </td>
             <td class="skill-base-column">
-                <input class="attribute-display" type="text" title="Base skill value" value="{{skill.data.data.base}}" disabled>
+                <input class="attribute-display" type="number" title="Base skill value" value="{{skill.data.data.base}}" disabled>
             </td>
             <td class="skill-total-column">
                 {{#if ../data.flags.sumskillcatmodifier}}
-                <input class="attribute-display sum-skill-cat-modifier" type="text" title="Total skill value + category modifier" value="{{addCatModifierToSkill @root.data.skillcategory ../skillCat skill.data.data.total}}" disabled>
+                <input class="attribute-display sum-skill-cat-modifier" type="number" title="Total skill value + category modifier" value="{{addCatModifierToSkill @root.data.skillcategory ../skillCat skill.data.data.total}}" disabled>
                 {{else}}
-                <input class="attribute-display" type="text" title="Total skill value" value="{{skill.data.data.total}}" disabled>
+                <input class="attribute-display" type="number" title="Total skill value" value="{{skill.data.data.total}}" disabled>
                 {{/if}}
             </td>
             <td class="skill-experience-column">

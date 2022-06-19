@@ -65,6 +65,7 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/runequest/templates/actor/hh/parts/actor-rune-spells.html",
     "systems/runequest/templates/actor/hh/parts/actor-spirit-spells.html",
     "systems/runequest/templates/actor/hh/parts/actor-mp-storage.html",
-    "systems/runequest/templates/actor/hh/parts/actor-gear.html"
+    "systems/runequest/templates/actor/hh/parts/actor-gear.html",
+    "systems/runequest/templates/actor/hh/parts/actor-notes.html"
   ]);
 };
