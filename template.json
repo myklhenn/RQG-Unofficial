@@ -453,6 +453,8 @@
     "modifier": 0,
     "total": 0,
     "experience": true,
+    "occupational": false,
+    "rollforincome": false,
     "skillcategory": ""
   },
   "passion": {

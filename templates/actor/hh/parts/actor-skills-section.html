@@ -28,6 +28,11 @@
                 <span class="skill-roll" data-skillname="{{skill.name}}" data-skillcategory="{{skill.data.data.skillcategory}}">
                     {{skill.name}}
                 </span>
+                {{#if skill.data.data.rollforincome}}
+                &nbsp;<i class="fas fa-circle income-skill-marker"></i>
+                {{else if skill.data.data.occupational}}
+                &nbsp;<i class="fas fa-circle occupational-skill-marker"></i>
+                {{/if}}
             </td>
             <td class="skill-base-column">
                 <input class="attribute-display" type="number" title="Base skill value" value="{{skill.data.data.base}}" disabled>

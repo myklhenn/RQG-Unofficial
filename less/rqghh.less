@@ -312,7 +312,7 @@
 			}
 		}
 
-		input[type=checkbox] {
+		input[type=checkbox]:enabled {
 			@checkbox-hover-effect();
 		}
 
@@ -448,6 +448,17 @@
 
 			.skill-roll {
 				@rollable-hover-effect();
+				vertical-align: middle;
+			}
+
+			.income-skill-marker {
+				font-size: 9px;
+				color: rgba(0, 190, 44, 0.75)
+			}
+
+			.occupational-skill-marker {
+				font-size: 9px;
+				color: rgba(225, 132, 0, 0.75)
 			}
 		}
 	}
