@@ -216,7 +216,7 @@
   color: var(--main-text-color);
   border: none;
 }
-.rqghh table.hh-table input[type=checkbox]:hover {
+.rqghh table.hh-table input[type=checkbox]:enabled:hover {
   cursor: pointer;
   box-shadow: 0 0 4px #7a7971;
 }
@@ -319,12 +319,23 @@
   width: 18px;
   height: 18px;
 }
+.rqghh .skills-section-table tr .skill-roll {
+  vertical-align: middle;
+}
 .rqghh .skills-section-table tr .skill-roll:hover {
   cursor: pointer;
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
 .rqghh .skills-section-table tr .skill-roll:hover nav {
   text-shadow: none;
+}
+.rqghh .skills-section-table tr .income-skill-marker {
+  font-size: 9px;
+  color: rgba(0, 190, 44, 0.75);
+}
+.rqghh .skills-section-table tr .occupational-skill-marker {
+  font-size: 9px;
+  color: rgba(225, 132, 0, 0.75);
 }
 .rqghh .skills-column:nth-child(n+2) {
   padding-left: 0.5em;

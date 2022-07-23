@@ -11,6 +11,19 @@
         </th>
     </thead>
     <tbody>
+        <tr class="item">
+            <td>General</td>
+            <td>
+                <input class="mpstorage-input" type="text" name="data.attributes.magicpoints.value" value="{{data.attributes.magicpoints.value}}"/>
+            </td>
+            <td>
+                <input class="attribute-display" type="text" value="{{data.attributes.magicpoints.max}}" disabled>
+            </td>
+            <td>
+                <input class="mpstorage-equiped" type="checkbox" checked="true" disabled>
+            </td>
+            <td></td>
+        </tr>
         {{#if data.mpstorage}}
         {{#each data.mpstorage as |storage id|}}
         <tr class="item" data-item-id="{{storage.id}}">
@@ -35,11 +48,11 @@
         </tr>
         {{/each}}
         {{else}}
-        <tr>
+        {{!-- <tr>
             <td colspan="5" class="empty-table-message">
                 <a>Add MP storage...</a>
             </td>
-        </tr>
+        </tr> --}}
         {{/if}}
     </tbody>
 </table>

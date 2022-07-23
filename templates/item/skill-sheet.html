@@ -37,10 +37,18 @@
                 <label class="label-text">{{data.total}}</label>
             </div>
             <div class="form-group">
+                <label class="label-text">Occupational Skill</label>
+                <input type="checkbox" name="data.occupational" {{checked data.occupational}} {{disabled data.rollforincome}}/>
+            </div>
+            <div class="form-group">
+                <label class="label-text">Roll for Income</label>
+                <input type="checkbox" name="data.rollforincome" {{checked data.rollforincome}}/>
+            </div>
+            <div class="form-group">
                 <label class="label-text">{{localize "Experience"}}</label>
                 <input type="checkbox" name="data.experience" {{checked data.experience}}/>
                 <!-- <input  class="attribute-value"  type="text"  name="data.experience"  value="{{data.experience}}"  data-dtype="Boolean"  /> -->
-            </div>            
+            </div>
         </div>
 
         {{!-- Description Tab --}}
