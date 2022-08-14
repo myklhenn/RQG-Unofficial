@@ -633,6 +633,11 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
       const value = Number(target.value) ? parseInt(target.value) : 0;
       await hitLocation?.update({ [target.name]: value });
     }
+    if (target?.classList?.contains('runepoints-current')) {
+      const cult = this.actor.items.get(RQGTools.findItemId(event));
+      const value = Number(target.value) ? parseInt(target.value) : 0;
+      await cult?.update({ [target.name]: value });
+    }
     if (target?.classList?.contains('mpstorage-current')) {
       const mpStorage = this.actor.items.get(RQGTools.findItemId(event));
       const value = Number(target.value) ? parseInt(target.value) : 0;

@@ -1,46 +1,69 @@
-<table class="gear-table hh-table">
-    <thead>
-        <th>{{localize "RQG.Gear"}}</th>
-        <th>{{localize "RQG.QTY"}}</th>
-        <th>{{localize "RQG.Weight"}}</th>
-        <th>{{localize "RQG.Description"}}</th>
-        <th>
-            <a class="item-control item-create" title="Create item" data-type="item">
-                <i class="fas fa-plus"></i>
-            </a>
-        </th>
-    </thead>
-    <tbody>
-        {{#if data.gear}}
-        {{#each data.gear as |item|}}
-        <tr class="item" data-item-id="{{item.id}}">
-            <td>{{localize item.name}}</td>
-            <td>
-                <input class="item-edit" type="text" name="data.quantity" value="{{item.data.data.quantity}}"/>
-            </td>
-            <td>
-                <input class="attribute-display" type="text" value="{{item.data.data.weight}}" disabled>
-            </td>
-            <td>
-                <!-- To be replaced by a better display once I find if Editor can be used readonly -->
-                {{displayDescription item.data.data.description}}
-            </td>
-            <td>
-                <a class="item-control item-edit" title="Edit Item">
-                    <i class="fas fa-edit"></i>
+<div>
+    <div class="flexrow wealth-row">
+        <div class="wealth-item">
+            <label class="wealth-label">Wheels</label>
+            <input type="number" name="data.wealth.wheels" value="{{data.wealth.wheels}}">
+        </div>
+        <div class="wealth-item">
+            <label class="wealth-label">Lunars</label>
+            <input type="number" name="data.wealth.lunars" value="{{data.wealth.lunars}}">
+        </div>
+        <div class="wealth-item">
+            <label class="wealth-label">Clacks</label>
+            <input type="number" name="data.wealth.clacks" value="{{data.wealth.clacks}}">
+        </div>
+        <div class="wealth-item">
+            <label class="wealth-label">Bolgs</label>
+            <input type="number" name="data.wealth.bolgs" value="{{data.wealth.bolgs}}">
+        </div>
+        <div class="wealth-item">
+            <label class="wealth-label">Goods</label>
+            <input type="number" name="data.wealth.goods" value="{{data.wealth.goods}}">&nbsp;(L)
+        </div>
+    </div>
+    <table class="gear-table hh-table">
+        <thead>
+            <th>{{localize "RQG.Gear"}}</th>
+            <th>{{localize "RQG.QTY"}}</th>
+            <th>{{localize "RQG.Weight"}}</th>
+            <th>{{localize "RQG.Description"}}</th>
+            <th class="item-controls">
+                <a class="item-control item-create" title="Create item" data-type="item">
+                    <i class="fas fa-plus"></i>
                 </a>
-                <a class="item-control item-delete" title="Delete Item">
-                    <i class="fas fa-trash"></i>
-                </a>
-            </td>
-        </tr>
-        {{/each}}
-        {{else}}
-        <tr>
-            <td colspan="5" class="empty-table-message">
-                <a>Add gear...</a>
-            </td>
-        </tr>
-        {{/if}}
-    </tbody>
-</table>
+            </th>
+        </thead>
+        <tbody>
+            {{#each data.gear as |item|}}
+            <tr class="item" data-item-id="{{item.id}}">
+                <td>{{localize item.name}}</td>
+                <td>
+                    <input class="item-edit" type="text" name="data.quantity" value="{{item.data.data.quantity}}"/>
+                </td>
+                <td>
+                    <input class="attribute-display" type="text" value="{{item.data.data.weight}}" disabled>
+                </td>
+                <td>
+                    <!-- To be replaced by a better display once I find if Editor can be used readonly -->
+                    {{displayDescription item.data.data.description}}
+                </td>
+                <td class="item-controls">
+                    <a class="item-control item-edit" title="Edit Item">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="item-control item-delete" title="Delete Item">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {{else}}
+            <tr class="empty-table-message">
+                <td colspan="4">Add gear...</td>
+                <td>
+                    <i class="fas fa-arrow-up"></i>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

@@ -22,6 +22,7 @@
         "damagebonus":"",
         "spiritcombatdamage": "",
         "maximumenc": 0,
+        "totalenc": 0,
         "dexsr": 0,
         "sizsr": 0,
         "meleesr":0,

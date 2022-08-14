@@ -184,14 +184,20 @@
   border: none;
   margin-bottom: 1em;
 }
+.rqghh table.hh-table tr th,
+.rqghh table.hh-table tr td {
+  text-align: center;
+}
 .rqghh table.hh-table tr th:first-child,
 .rqghh table.hh-table tr td:first-child {
   text-align: left;
   padding-left: 1em;
 }
-.rqghh table.hh-table tr th,
-.rqghh table.hh-table tr td {
-  text-align: center;
+.rqghh table.hh-table tr th:last-child.item-controls,
+.rqghh table.hh-table tr td:last-child.item-controls {
+  width: 80px;
+  padding-right: 1em;
+  padding-left: 1em;
 }
 .rqghh table.hh-table input[type=text] {
   width: 50px;
@@ -262,17 +268,35 @@
 .rqghh .passions-table tr .passion-roll:hover nav {
   text-shadow: none;
 }
+.rqghh .passions-table tr td {
+  padding-top: 0.15em;
+  padding-bottom: 0.15em;
+}
 .rqghh .passions-table tr td:first-child input[type=number] {
   text-align: center;
   margin-left: 0.75em;
 }
-.rqghh .passions-table tr td:nth-child(n+2) {
+.rqghh .passions-table tr td:nth-child(2) {
   width: 120px;
+}
+.rqghh .passions-table tr td input[type=checkbox] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
 }
 .rqghh .table-divider table:first-child {
   margin-right: 0.75em;
 }
-.rqghh .attacks-table tr td:nth-child(n+2) {
+.rqghh .attacks-table tr td:nth-child(2) {
+  width: 120px;
+}
+.rqghh .attacks-table tr td:nth-child(3) {
+  width: 120px;
+}
+.rqghh .attacks-table tr td:nth-child(4) {
+  width: 120px;
+}
+.rqghh .attacks-table tr td:nth-child(5) {
   width: 120px;
 }
 .rqghh .skills-section-table {
@@ -340,21 +364,80 @@
 .rqghh .skills-column:nth-child(n+2) {
   padding-left: 0.5em;
 }
-.rqghh .cults-table tr td:nth-child(n+2) {
-  width: 120px;
+.rqghh .magic-column:nth-child(n+2) {
+  padding-left: 0.5em;
+}
+.rqghh .magic-column table {
+  flex: none;
+  margin-top: 0;
+}
+.rqghh .cults-table tr td:nth-child(2) {
+  width: 80px;
+}
+.rqghh .cults-table tr td:nth-child(3) {
+  width: 80px;
 }
 .rqghh .cults-table input[type=text] {
   width: 50px;
 }
-.rqghh .empty-table-message {
+.rqghh .mp-storage-table tr td {
+  padding-top: 0.15em;
+  padding-bottom: 0.15em;
+}
+.rqghh .mp-storage-table tr td:nth-child(2) {
+  width: 80px;
+}
+.rqghh .mp-storage-table tr td:nth-child(3) {
+  width: 80px;
+}
+.rqghh .mp-storage-table tr td:nth-child(4) {
+  width: 80px;
+}
+.rqghh .mp-storage-table input[type=text] {
+  width: 50px;
+}
+.rqghh .mp-storage-table input[type=checkbox] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+.rqghh .empty-table-message td {
   font-style: italic;
   color: rgba(25, 24, 19, 0.75);
+  height: 29px;
 }
-.rqghh .rune-spells-table tr td:nth-child(n+2) {
-  width: 120px;
+.rqghh .empty-table-message td:last-child {
+  width: 70px;
+}
+.rqghh .rune-spells-table tr td:nth-child(3) {
+  width: 80px;
 }
 .rqghh .rune-spells-table tr input.attribute-display {
   width: 50px;
+}
+.rqghh .spirit-spells-table tr td:nth-child(2) {
+  width: 80px;
+}
+.rqghh .spirit-spells-table tr input.attribute-display {
+  width: 50px;
+}
+.rqghh .wealth-row {
+  justify-content: space-evenly;
+}
+.rqghh .wealth-row .wealth-item {
+  align-items: center;
+  flex: 0 0 content;
+}
+.rqghh .wealth-row .wealth-item label {
+  padding-right: 0.2em;
+}
+.rqghh .wealth-row .wealth-item input[type=number] {
+  text-align: center;
+  width: 60px;
+}
+.rqghh .wealth-row .wealth-item input[type=number]:hover {
+  cursor: text;
+  box-shadow: 0 0 4px #7a7971;
 }
 .rqghh .notes-page .editor {
   height: 400px;
