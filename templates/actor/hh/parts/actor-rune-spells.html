@@ -1,26 +1,25 @@
 <table class="rune-spells-table hh-table">
     <thead>
         <th>{{localize "RQG.Runespells"}}</th>
-        <th>{{localize "RQG.Points"}}</th>
         <th>{{localize "RQG.Runes"}}</th>
-        <th>
+        <th>{{localize "RQG.Points"}}</th>
+        <th class="item-controls">
             <a class="item-control item-create" title="Create item" data-type="runespell">
                 <i class="fas fa-plus"></i>
             </a>
         </th>
     </thead>
     <tbody>
-        {{#if data.spells.rune}}
         {{#each data.spells.rune as |spell|}}
         <tr class="item" data-item-id="{{spell.id}}" data-spellname="{{spell.name}}" data-rune="{{spell.data.data.rune}}">
             <td>
                 <a class="rune-spell-roll">{{spell.name}}</a>
             </td>
             <td>
-                <input class="attribute-display" type="text" value="{{spell.data.data.points}}" disabled>
+                {{spell.data.data.rune}}
             </td>
             <td>
-                {{spell.data.data.rune}}
+                <input class="attribute-display" type="text" value="{{spell.data.data.points}}" disabled>
             </td>
             <td class="item-controls">
                 <a class="spell-toggle" title="Toggle">
@@ -34,13 +33,13 @@
                 </a>
             </td>
         </tr>
-        {{/each}}
         {{else}}
-        <tr>
-            <td colspan="4" class="empty-table-message">
-                <a>Add a spell...</a>
+        <tr class="empty-table-message">
+            <td colspan="3">Add a spell...</td>
+            <td>
+                <i class="fas fa-arrow-up"></i>
             </td>
         </tr>
-        {{/if}}
+        {{/each}}
     </tbody>
 </table>

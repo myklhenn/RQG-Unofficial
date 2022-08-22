@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th colspan="2">Passions</th>
-            <th>
+            <th class="item-controls">
                 <a class="item-control item-create" title="Add a new passion" data-type="passion">
                     <i class="fas fa-plus"></i>
                 </a>
@@ -10,7 +10,6 @@
         </tr>
     </thead>
     <tbody>
-        {{#if data.passions}}
         {{#each data.passions as |passion| }}
         <tr class="item" data-item-id="{{passion.id}}">
             <td>
@@ -39,13 +38,13 @@
                 </a>
             </td>
         </tr>
-        {{/each}}
         {{else}}
-        <tr>
-            <td colspan="3" class="empty-table-message">
-                <a>Add a passion...</a>
+        <tr class="empty-table-message">
+            <td colspan="2">Add a passion...</td>
+            <td>
+                <i class="fas fa-arrow-up"></i>
             </td>
         </tr>
-        {{/if}}
+        {{/each}}
     </tbody>
 </table>

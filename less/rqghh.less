@@ -280,12 +280,18 @@
 		margin-bottom: 1em;
 
 		tr {
-			th:first-child, td:first-child {
-				text-align: left;
-				padding-left: 1em;
-			}
 			th, td {
 				text-align: center;
+
+				&:first-child {
+					text-align: left;
+					padding-left: 1em;
+				}
+				&:last-child.item-controls {
+					width: 80px;
+					padding-right: 1em;
+					padding-left: 1em;
+				}
 			}
 		}
 
@@ -367,13 +373,23 @@
 			.passion-roll {
 				@rollable-hover-effect();
 			}
-			td:first-child input[type=number] {
-				text-align: center;
-				margin-left: 0.75em;
+			td {
+				padding-top: 0.15em;
+				padding-bottom: 0.15em;
+				&:first-child input[type=number] {
+					text-align: center;
+					margin-left: 0.75em;
+				}
+				&:nth-child(2) {
+					width: 120px;
+				}
+				input[type=checkbox] {
+					flex: 0 0 18px;
+					width: 18px;
+					height: 18px;
+				}
 			}
-			td:nth-child(n+2) {
-				width: 120px;
-			}
+
 		}
 	}
 
@@ -382,8 +398,19 @@
 	}
 
 	.attacks-table {
-		tr td:nth-child(n+2) {
-			width: 120px;
+		tr td {
+			&:nth-child(2) {
+				width: 120px;
+			}
+			&:nth-child(3) {
+				width: 120px;
+			}
+			&:nth-child(4) {
+				width: 120px;
+			}
+			&:nth-child(5) {
+				width: 120px;
+			}
 		}
 	}
 
@@ -469,9 +496,24 @@
 		}
 	}
 
+	.magic-column {
+		&:nth-child(n+2) {
+			padding-left: 0.5em;
+		}
+		table {
+			flex: none;
+			margin-top: 0;
+		}
+	}
+
 	.cults-table {
-		tr td:nth-child(n+2) {
-			width: 120px;
+		tr {
+			td:nth-child(2) {
+				width: 80px;
+			}
+			td:nth-child(3) {
+				width: 80px;
+			}
 		}
 
 		input[type=text] {
@@ -479,18 +521,83 @@
 		}
 	}
 
+	.mp-storage-table {
+		tr {
+			td {
+				padding-top: 0.15em;
+				padding-bottom: 0.15em;
+			}
+			td:nth-child(2) {
+				width: 80px;
+			}
+			td:nth-child(3) {
+				width: 80px;
+			}
+			td:nth-child(4) {
+				width: 80px;
+			}
+		}
+
+		input[type=text] {
+			width: 50px;
+		}
+
+		input[type=checkbox] {
+			flex: 0 0 18px;
+			width: 18px;
+			height: 18px;
+		}
+	}
+
 	.empty-table-message {
-		font-style: italic;
-		color: rgba(25, 24, 19, 0.75);
+		td {
+			font-style: italic;
+			color: rgba(25, 24, 19, 0.75);
+			height: 29px;
+
+			&:last-child {
+				width: 70px;
+			}
+		}
 	}
 
 	.rune-spells-table {
 		tr {
-			td:nth-child(n+2) {
-				width: 120px;
+			td:nth-child(3) {
+				width: 80px;
 			}
 			input.attribute-display {
 				width: 50px;
+			}
+		}
+	}
+
+	.spirit-spells-table {
+		tr {
+			td:nth-child(2) {
+				width: 80px;
+			}
+			input.attribute-display {
+				width: 50px;
+			}
+		}
+	}
+
+	.wealth-row {
+		justify-content: space-evenly;
+
+		.wealth-item {
+			align-items: center;
+			flex: 0 0 content;
+
+			label {
+				padding-right: 0.2em;
+			}
+
+			input[type=number] {
+				text-align: center;
+				width: 60px;
+				@input-hover-effect();
 			}
 		}
 	}

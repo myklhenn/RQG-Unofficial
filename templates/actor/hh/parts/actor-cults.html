@@ -2,10 +2,9 @@
     <thead>
         <tr>
             <th>{{localize "RQG.Cults"}} & {{localize "RQG.Runepoints"}}</th>
-            {{!-- <th></th> --}}
-            {{!-- <th></th> --}}
-            <th></th>
-            <th>
+            <th>Current RP</th>
+            <th>Max RP</th>
+            <th class="item-controls">
                 <a class="item-control item-create" title="Add a cult" data-type="cult">
                     <i class="fas fa-plus"></i>
                 </a>
@@ -13,30 +12,28 @@
         </tr>
     </thead>
     <tbody>
-        {{#if data.cults}}
-        {{#each data.cults as |cult id|}}
+        {{#each data.cults as |cult|}}
         <tr class="item cult-row" data-item-id="{{cult.id}}" data-cultname="{{cult.name}}">
             <td>{{cult.name}}</td>
-            {{!-- <td>{{cult.data.rank}}</td> --}}
-            {{!-- <td>{{cult.data.subcult}}</td> --}}
             <td>
-                <input class="attribute-display" type="text" value="{{cult.data.data.currentrunepoint}} / {{cult.data.data.maxrunepoint}}" disabled>
+                <input class="runepoints-current" type="text" name="data.currentrunepoint" value="{{cult.data.data.currentrunepoint}}">
             </td>
             <td>
-                <div class="item-controls">
-                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
-                </div>
+                <input class="attribute-display" type="text" value="{{cult.data.data.maxrunepoint}}" disabled>
+            </td>
+            <td class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
+        {{else}}
+        <tr class="empty-table-message">
+            <td colspan="3">Add a cult...</td>
+            <td>
+                <i class="fas fa-arrow-up"></i>
             </td>
         </tr>
         {{/each}}
-        {{else}}
-        <tr>
-            <td colspan="5" class="empty-table-message">
-                <a>Add a cult...</a>
-            </td>
-        </tr>
-        {{/if}}
     </tbody>
 
 </table>
