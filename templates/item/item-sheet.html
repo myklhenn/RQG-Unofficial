@@ -3,13 +3,19 @@
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
-            <div class="resource">
-            	<label>Quantity</label>
-                <input type="text" name="data.quantity" value="{{data.quantity}}" data-dtype="Number"/>
-            </div>
-            <div class="resource">
-            	<label>Weight</label>
-                <input type="text" name="data.weight" value="{{data.weight}}" data-dtype="Number"/>
+            <div class="resource-fields">
+                <div class="resource">
+                    <label>Quantity</label>
+                    <input type="text" name="data.quantity" value="{{data.quantity}}" data-dtype="Number"/>
+                </div>
+                <div class="resource">
+                    <label>Weight</label>
+                    <input type="text" name="data.weight" value="{{data.weight}}" data-dtype="Number"/>
+                </div>
+                <div class="resource">
+                    <label>Equipped</label>
+                    <input type="checkbox" name="data.equipped" {{checked data.equipped}} data-dtype="Boolean"/>
+                </div>
             </div>
         </div>
     </header>
@@ -63,6 +69,6 @@
         {{!-- Active Effects Tab --}}
         <div class="tab activeeffects" data-group="primary" data-tab="activeeffects">
             {{> "systems/runequest/templates/actor/parts/actor-activeeffectsv2.html"}}
-        </div>        
+        </div>
     </section>
 </form>

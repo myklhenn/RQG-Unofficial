@@ -45,12 +45,31 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
   }
 
   /**
-   * Organize and classify Items for Character sheets.
+   * Organize and classify Actor data for Character sheets.
    * @param {Object} context The actor to prepare.
    * @return {undefined}
    */
+  _prepareCharacterData(context) {
+    // calculate maximum encumberance for actor
+    let { strength, constitution } = context.data.characteristics;
+    let maximumenc = Math.floor((strength.value + constitution.value) / 2);
+    if (strength.value < maximumenc) maximumenc = strength.value;
 
-  _prepareCharacterData(context) {}
+    // calculate total encumberance for gear items that are "equipped"
+    let totalenc = 0;
+    for (let item of context.data.gear) {
+      const { weight, equipped } = item.data.data;
+      if (equipped) totalenc += weight;
+    }
+
+    // update actor's attributes object accordingly
+    context.data.attributes = {
+      ...context.data.attributes,
+      maximumenc,
+      totalenc,
+      encumbered: (totalenc >= maximumenc)
+    };
+  }
 
   /**
    * Organize and classify Items for Character sheets.
@@ -654,6 +673,15 @@ export class RunequestActorHarharlHomebrewSheet extends RunequestBaseActorSheet 
     if (target?.classList?.contains('passion-experience')) {
       const passion = this.actor.items.get(RQGTools.findItemId(event));
       await passion?.update({ [target.name]: target.checked });
+    }
+    if (target?.classList?.contains('gear-quantity')) {
+      const gear = this.actor.items.get(RQGTools.findItemId(event));
+      const value = Number(target.value) ? parseInt(target.value) : 0;
+      await gear?.update({ [target.name]: value });
+    }
+    if (target?.classList?.contains('gear-equipped')) {
+      const gear = this.actor.items.get(RQGTools.findItemId(event));
+      await gear?.update({ [target.name]: target.checked });
     }
     // if (target?.classList?.contains('attacks')) {
     //   const attack = this.actor.items.get(RQGTools.findItemId(event));

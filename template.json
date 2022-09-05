@@ -23,6 +23,7 @@
         "spiritcombatdamage": "",
         "maximumenc": 0,
         "totalenc": 0,
+        "encumbered": false,
         "dexsr": 0,
         "sizsr": 0,
         "meleesr":0,
@@ -444,6 +445,7 @@
     "templates": ["description"],
     "quantity": 1,
     "weight": 0,
+    "equipped": false,
     "attributes": {}
   },
   "skill": {
