@@ -24,6 +24,7 @@
     <table class="gear-table hh-table">
         <thead>
             <th>{{localize "RQG.Gear"}}</th>
+            <th>Equ</th>
             <th>{{localize "RQG.QTY"}}</th>
             <th>{{localize "RQG.Weight"}}</th>
             <th>{{localize "RQG.Description"}}</th>
@@ -36,12 +37,22 @@
         <tbody>
             {{#each data.gear as |item|}}
             <tr class="item" data-item-id="{{item.id}}">
-                <td>{{localize item.name}}</td>
                 <td>
-                    <input class="item-edit" type="text" name="data.quantity" value="{{item.data.data.quantity}}"/>
+                    {{localize item.name}}
                 </td>
                 <td>
-                    <input class="attribute-display" type="text" value="{{item.data.data.weight}}" disabled>
+                    <input
+                        class="gear-equipped"
+                        type="checkbox"
+                        name="data.equipped"
+                        {{checked item.data.data.equipped}}
+                    />
+                </td>
+                <td>
+                    <input class="gear-quantity" type="text" name="data.quantity" value="{{item.data.data.quantity}}"/>
+                </td>
+                <td>
+                    <input class="attribute-display" type="text" name="data.weight" value="{{item.data.data.weight}}" disabled>
                 </td>
                 <td>
                     <!-- To be replaced by a better display once I find if Editor can be used readonly -->
@@ -66,4 +77,14 @@
             {{/each}}
         </tbody>
     </table>
+    <div class="flexrow encumberance-row">
+        <div class="encumberance-item {{#if data.attributes.encumbered}}encumbered{{/if}}">
+            <label>Total Enc</label>
+            <input class="attribute-display" type="number" name="data.attributes.totalenc" value="{{data.attributes.totalenc}}" disabled>
+        </div>
+        <div class="encumberance-item">
+            <label>Max Enc</label>
+            <input class="attribute-display" type="number" name="data.attributes.maximumenc" value="{{data.attributes.maximumenc}}" disabled>
+        </div>
+    </div>
 </div>

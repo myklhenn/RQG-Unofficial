@@ -35,6 +35,10 @@
 }
 .rqghh nav.sheet-tabs {
   margin-bottom: 0.75em;
+  line-height: 20px;
+}
+.rqghh nav.sheet-tabs .item.active {
+  font-size: 18px;
 }
 .rqghh nav a.unlock-character-sheet {
   flex: 0 0 20px;
@@ -421,6 +425,23 @@
 .rqghh .spirit-spells-table tr input.attribute-display {
   width: 50px;
 }
+.rqghh .gear-table {
+  margin-bottom: 0.25em;
+}
+.rqghh .gear-table tr td:nth-child(2) {
+  width: 50px;
+}
+.rqghh .gear-table tr td:nth-child(3) {
+  width: 80px;
+}
+.rqghh .gear-table tr td:nth-child(4) {
+  width: 80px;
+}
+.rqghh .gear-table tr td input[type=checkbox] {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
 .rqghh .wealth-row {
   justify-content: space-evenly;
 }
@@ -438,6 +459,31 @@
 .rqghh .wealth-row .wealth-item input[type=number]:hover {
   cursor: text;
   box-shadow: 0 0 4px #7a7971;
+}
+.rqghh .encumberance-row {
+  justify-content: center;
+}
+.rqghh .encumberance-row .encumberance-item {
+  align-items: center;
+  flex: 0 0 content;
+  margin: 0 1em;
+}
+.rqghh .encumberance-row .encumberance-item label {
+  padding-right: 0.2em;
+}
+.rqghh .encumberance-row .encumberance-item input {
+  text-align: center;
+  width: 60px;
+}
+.rqghh .encumberance-row .encumberance-item input.attribute-display {
+  color: var(--main-text-color);
+}
+.rqghh .encumberance-row .encumberance-item.encumbered label {
+  color: #780000;
+}
+.rqghh .encumberance-row .encumberance-item.encumbered input {
+  background-color: rgba(192, 0, 0, 0.25);
+  color: #780000;
 }
 .rqghh .notes-page .editor {
   height: 400px;

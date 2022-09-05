@@ -15,7 +15,7 @@
     <section class="sheet-body">
         {{!-- Attributes Tab --}}
         <div class="tab details" data-group="primary" data-tab="details">
-            <!--            
+            <!--
             <div class="form-group">
                 <label class="label-text">{{localize "RQG.HitLocation"}}</label>
                 {{#if @root.document.parent}}
@@ -25,7 +25,7 @@
                     <option value="{{skill.id}}">{{skill.name}}</option>
                     {{/each}}
                     {{/select}}
-                </select>                  
+                </select>
                 {{else}}
                 <select name="data.skillused">
                     {{#select data.skillused}}
@@ -33,8 +33,8 @@
                     <option value="{{type}}">{{localize name}}</option>
                     {{/each}}
                     {{/select}}
-                </select>                  
-                {{/if}}            
+                </select>
+                {{/if}}
             </div>
             -->
             <div class="form-group">
@@ -45,14 +45,13 @@
                     <option value="{{type}}">{{localize name}}</option>
                     {{/each}}
                     {{/select}}
-                </select>  
+                </select>
             </div>
 			<div class="skill-attributes" style="display: block;" data-set="hitlocations">
-                {{log data}}
                 {{#each data.hitlocations as |hl key|}}
                     <span class="hitloc-property {{#if hl}}switched-on{{/if}}" data-hitlocation="{{key}}">{{localize hl}}</span>
                 {{/each}}
-			</div>            
+			</div>
             <div class="form-group">
                 <label class="label-text">{{localize "RQG.ArmorPoints"}}</label>
                 <input  class="attribute-value"  type="text"  name="data.ap"  value="{{data.ap}}"  data-dtype="Number"  />
@@ -64,15 +63,15 @@
             <div class="form-group">
                 <label class="label-text">{{localize "RQG.Equiped"}}</label>
                 <input type="checkbox" name="data.equiped" {{checked data.equiped}}/>
-            </div>         
+            </div>
             <div class="form-group">
                 <label class="label-text">{{localize "RQG.ArmorPenalty"}}</label>
                 <input  class="attribute-value"  type="text"  name="data.armorpenalty"  value="{{data.armorpenalty}}"  data-dtype="String"  />
-            </div>         
+            </div>
             <div class="form-group">
                 <label class="label-text">{{localize "RQG.ENC"}}</label>
                 <input  class="attribute-value"  type="text"  name="data.ENC"  value="{{data.ENC}}"  data-dtype="Number"  />
-            </div>                                 
+            </div>
         </div>
 
         {{!-- Description Tab --}}

@@ -43,12 +43,6 @@
 		}
 	}
 
-	@input-hover-effect-2: {
-		&:hover {
-
-		}
-	}
-
 	/* Flexbox */
 	.flexrow {
 		display: flex;
@@ -110,6 +104,11 @@
 
 	nav.sheet-tabs {
 		margin-bottom: 0.75em;
+		line-height: 20px;
+
+		.item.active {
+			font-size: 18px;
+		}
 	}
 
 	nav a.unlock-character-sheet {
@@ -507,11 +506,11 @@
 	}
 
 	.cults-table {
-		tr {
-			td:nth-child(2) {
+		tr td {
+			&:nth-child(2) {
 				width: 80px;
 			}
-			td:nth-child(3) {
+			&:nth-child(3) {
 				width: 80px;
 			}
 		}
@@ -522,18 +521,17 @@
 	}
 
 	.mp-storage-table {
-		tr {
-			td {
-				padding-top: 0.15em;
-				padding-bottom: 0.15em;
-			}
-			td:nth-child(2) {
+		tr td {
+			padding-top: 0.15em;
+			padding-bottom: 0.15em;
+
+			&:nth-child(2) {
 				width: 80px;
 			}
-			td:nth-child(3) {
+			&:nth-child(3) {
 				width: 80px;
 			}
-			td:nth-child(4) {
+			&:nth-child(4) {
 				width: 80px;
 			}
 		}
@@ -583,6 +581,28 @@
 		}
 	}
 
+	.gear-table {
+		margin-bottom: 0.25em;
+
+		tr td {
+			&:nth-child(2) {
+				width: 50px;
+			}
+			&:nth-child(3) {
+				width: 80px;
+			}
+			&:nth-child(4) {
+				width: 80px;
+			}
+
+			input[type=checkbox] {
+				flex: 0 0 18px;
+				width: 18px;
+				height: 18px;
+			}
+		}
+	}
+
 	.wealth-row {
 		justify-content: space-evenly;
 
@@ -598,6 +618,39 @@
 				text-align: center;
 				width: 60px;
 				@input-hover-effect();
+			}
+		}
+	}
+
+	.encumberance-row {
+		justify-content: center;
+
+		.encumberance-item {
+			align-items: center;
+			flex: 0 0 content;
+			margin: 0 1em;
+
+			label {
+				padding-right: 0.2em;
+			}
+
+			input {
+				text-align: center;
+				width: 60px;
+
+				&.attribute-display {
+					color: var(--main-text-color);
+				}
+			}
+
+			&.encumbered {
+				label {
+					color: rgb(120, 0, 0);
+				}
+				input {
+					background-color: rgba(192, 0, 0, 0.25);
+					color: rgb(120, 0, 0);
+				}
 			}
 		}
 	}
